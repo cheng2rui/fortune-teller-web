@@ -132,6 +132,11 @@
     .element-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
     .element { border: 1px solid var(--line); border-radius: 12px; padding: 10px; text-align: center; background: #fffaf2; }
     .element b { display: block; color: var(--red-dark); font-size: 20px; }
+    .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .insight { border: 1px solid var(--line); border-radius: 13px; padding: 11px 12px; background: #fffaf2; }
+    .insight b { display: block; color: var(--red-dark); margin-bottom: 5px; }
+    .relation-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+    .relation-tags span { border: 1px solid var(--line-strong); border-radius: 999px; padding: 5px 8px; background: rgba(255,255,255,.62); font-size: 12px; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .advice-summary { border: 1px solid var(--line-strong); border-radius: 14px; padding: 12px; background: #fff7eb; margin-bottom: 12px; }
     .advice-summary b { color: var(--red-dark); }
@@ -154,7 +159,7 @@
       .form-card { position: static; }
       .empty { min-height: 260px; }
       .output { min-height: 260px; }
-      .two-col, .advice-grid { grid-template-columns: 1fr; }
+      .two-col, .advice-grid, .insight-grid { grid-template-columns: 1fr; }
       .advice-box.full { grid-column: auto; }
     }
     @media (max-width: 460px) {
@@ -177,7 +182,7 @@
       <div>
         <div class="eyebrow">BAZI · SOLAR TERM · ALMANAC</div>
         <h1>四柱排盘与黄历日课</h1>
-        <p class="intro">参考开源八字排盘工具的呈现方式：先给出生信息、真太阳时校正、四柱与五行，再列今日黄历和事项建议。页面只做结构化排盘与传统文化参考，不使用“玄学包装式”文案。</p>
+        <p class="intro">按传统排盘顺序展示出生校正、四柱五行、盘面关系与今日黄历。重点给出可核对的依据和可执行的取用建议，不做夸张断语。</p>
       </div>
       <div class="stamp">通书<br>参考</div>
     </header>
@@ -270,6 +275,14 @@
     const branchElement = { 子:'水', 丑:'土', 寅:'木', 卯:'木', 辰:'土', 巳:'火', 午:'火', 未:'土', 申:'金', 酉:'金', 戌:'土', 亥:'水' };
     const elementNotes = {
       木: '条理、计划、学习与生发', 火: '表达、曝光、热度与反应', 土: '承载、执行、稳定与收束', 金: '规则、效率、判断与边界', 水: '流动、信息、适应与复盘'
+    };
+    const monthElementSeason = { 寅:'木旺初春', 卯:'木旺仲春', 辰:'土旺春末', 巳:'火旺初夏', 午:'火旺仲夏', 未:'土旺夏末', 申:'金旺初秋', 酉:'金旺仲秋', 戌:'土旺秋末', 亥:'水旺初冬', 子:'水旺仲冬', 丑:'土旺冬末' };
+    const stemCombines = { 甲己:'合土', 己甲:'合土', 乙庚:'合金', 庚乙:'合金', 丙辛:'合水', 辛丙:'合水', 丁壬:'合木', 壬丁:'合木', 戊癸:'合火', 癸戊:'合火' };
+    const branchRelations = {
+      子午:'六冲', 午子:'六冲', 丑未:'六冲', 未丑:'六冲', 寅申:'六冲', 申寅:'六冲', 卯酉:'六冲', 酉卯:'六冲', 辰戌:'六冲', 戌辰:'六冲', 巳亥:'六冲', 亥巳:'六冲',
+      子丑:'六合土', 丑子:'六合土', 寅亥:'六合木', 亥寅:'六合木', 卯戌:'六合火', 戌卯:'六合火', 辰酉:'六合金', 酉辰:'六合金', 巳申:'六合水', 申巳:'六合水', 午未:'六合', 未午:'六合',
+      子未:'相害', 未子:'相害', 丑午:'相害', 午丑:'相害', 寅巳:'相害', 巳寅:'相害', 卯辰:'相害', 辰卯:'相害', 申亥:'相害', 亥申:'相害', 酉戌:'相害', 戌酉:'相害',
+      子卯:'相刑', 卯子:'相刑', 辰辰:'自刑', 午午:'自刑', 酉酉:'自刑', 亥亥:'自刑'
     };
     const questionProfiles = {
       '今日综合': {
@@ -411,6 +424,44 @@
       if (bazi.balance >= 5) return `五行覆盖完整，日常事务可多线协调；较旺为${bazi.strongest}，对应${elementNotes[bazi.strongest]}，较弱为${bazi.weakest}，宜用清单、复核或节奏管理补足。`;
       return `五行偏向${bazi.strongest}，处理相关事务较顺；${bazi.weakest}不足处容易形成疏漏，今日不宜凭感觉快速拍板。`;
     }
+    function relationSummary(pillars) {
+      const labels = ['年','月','日','时'];
+      const stems = pillars.map(p => p[0]);
+      const branches = pillars.map(p => p[1]);
+      const stemHits = [];
+      const branchHits = [];
+      for (let i = 0; i < 4; i++) {
+        for (let j = i + 1; j < 4; j++) {
+          const stemKey = stems[i] + stems[j];
+          const branchKey = branches[i] + branches[j];
+          if (stemCombines[stemKey]) stemHits.push(`${labels[i]}${labels[j]}天干：${stems[i]}${stems[j]}${stemCombines[stemKey]}`);
+          if (branchRelations[branchKey]) branchHits.push(`${labels[i]}${labels[j]}地支：${branches[i]}${branches[j]}${branchRelations[branchKey]}`);
+        }
+      }
+      return { stemHits, branchHits };
+    }
+    function strengthHint(bazi) {
+      const dayMaster = bazi.pillars[2][0];
+      const dayElement = stemElement[dayMaster];
+      const monthBranch = bazi.pillars[1][1];
+      const monthSeason = monthElementSeason[monthBranch] || `${branchElement[monthBranch]}气`;
+      const sameCount = bazi.counts[dayElement] || 0;
+      const level = sameCount >= 3 ? '同类根气较足' : sameCount <= 1 ? '同类偏少，需靠节奏与资源补位' : '同类力量中等';
+      return { dayMaster, dayElement, monthBranch, monthSeason, sameCount, level };
+    }
+    function baziInsightHtml(bazi) {
+      const rel = relationSummary(bazi.pillars);
+      const strength = strengthHint(bazi);
+      const relTags = [...rel.stemHits, ...rel.branchHits];
+      const relationText = relTags.length ? relTags.map(x => `<span>${x}</span>`).join('') : '<span>四柱之间未见明显六合、六冲、相害或天干五合</span>';
+      return `
+        <div class="insight-grid">
+          <div class="insight"><b>日主与月令</b>日主为${strength.dayMaster}${strength.dayElement}，生于${strength.monthBranch}月（${strength.monthSeason}）。${strength.level}；判断时优先看月令，再看四柱五行分布。</div>
+          <div class="insight"><b>盘面短板</b>${bazi.strongest}偏旺、${bazi.weakest}偏弱。今日涉及${elementNotes[bazi.weakest]}的事项，要把流程、凭证、时间节点写清楚。</div>
+          <div class="insight"><b>四柱关系</b><div class="relation-tags">${relationText}</div></div>
+          <div class="insight"><b>取用方向</b>顺${bazi.strongest}之势可推进${elementNotes[bazi.strongest]}；补${bazi.weakest}则靠复核、留痕、找人校验，不靠临场发挥。</div>
+        </div>`;
+    }
     function overlapItems(source, keywords, fallbackCount = 3) {
       return source.filter(item => keywords.some(key => item.includes(key))).slice(0, fallbackCount);
     }
@@ -519,9 +570,11 @@
                 <p>${baziReading(bazi)}</p>
               </div></section>
 
-              <section class="block"><h3>四、今日黄历</h3><div class="block-content">${almanacTable(almanac)}</div></section>
+              <section class="block"><h3>四、盘面要点</h3><div class="block-content">${baziInsightHtml(bazi)}</div></section>
 
-              <section class="block"><h3>五、事项建议</h3><div class="block-content">${adviceSection}</div></section>
+              <section class="block"><h3>五、今日黄历</h3><div class="block-content">${almanacTable(almanac)}</div></section>
+
+              <section class="block"><h3>六、事项建议</h3><div class="block-content">${adviceSection}</div></section>
             </div>
           </article>`;
       } catch (err) {
