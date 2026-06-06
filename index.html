@@ -133,6 +133,13 @@
     .element { border: 1px solid var(--line); border-radius: 12px; padding: 10px; text-align: center; background: #fffaf2; }
     .element b { display: block; color: var(--red-dark); font-size: 20px; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .advice-summary { border: 1px solid var(--line-strong); border-radius: 14px; padding: 12px; background: #fff7eb; margin-bottom: 12px; }
+    .advice-summary b { color: var(--red-dark); }
+    .advice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .advice-box { border: 1px solid var(--line); border-radius: 13px; padding: 11px 12px; background: #fffaf2; }
+    .advice-box.full { grid-column: 1 / -1; }
+    .advice-box b { display: block; margin-bottom: 6px; color: var(--red-dark); }
+    .basis { color: var(--muted); font-size: 13px; line-height: 1.65; }
     .list { margin: 0; padding-left: 1.2em; }
     .list li { margin: 4px 0; }
     .good { color: var(--green); font-weight: 700; }
@@ -147,7 +154,8 @@
       .form-card { position: static; }
       .empty { min-height: 260px; }
       .output { min-height: 260px; }
-      .two-col { grid-template-columns: 1fr; }
+      .two-col, .advice-grid { grid-template-columns: 1fr; }
+      .advice-box.full { grid-column: auto; }
     }
     @media (max-width: 460px) {
       .wrap { width: calc(100% - 14px); }
@@ -263,14 +271,45 @@
     const elementNotes = {
       木: '条理、计划、学习与生发', 火: '表达、曝光、热度与反应', 土: '承载、执行、稳定与收束', 金: '规则、效率、判断与边界', 水: '流动、信息、适应与复盘'
     };
-    const adviceMap = {
-      '今日综合': ['先处理可闭环事项，再进入复杂议题。', '把重要事项写成清单，减少临场判断。'],
-      '事业 / 项目': ['适合验收、复盘、补文档、定边界。', '若要推进新动作，先明确负责人和验收口径。'],
-      '财务 / 投资': ['重在风控和现金流，避免因短线波动加大杠杆。', '不清楚成本、期限和退出条件时，不宜仓促决定。'],
-      '感情 / 人际': ['先确认事实，再表达感受；少用暗示，多说具体需求。', '适合修复误会、同步预期，不宜争一时输赢。'],
-      '健康 / 状态': ['保持作息、饮水和轻运动；高强度任务拆段处理。', '疲劳时减少长期承诺，先恢复判断力。'],
-      '学习 / 创作': ['先做可验证初稿，再根据反馈修正。', '适合整理旧材料、建立模板和复用结构。']
+    const questionProfiles = {
+      '今日综合': {
+        focus: '收口与排序',
+        direct: ['把今日事项分成“必须完成 / 可推进 / 可放弃”三栏，先做必须完成项。', '上午适合定计划和处理文书，下午适合沟通确认，晚上只做复盘。', '任何新增事项都先问一句：是否影响今天的主线交付。'],
+        avoid: ['同时开三条以上战线。', '没有截止时间、负责人和验收口径的临时承诺。'],
+        metric: '至少完成 1 个可验收闭环；新增任务不超过 2 个。'
+      },
+      '事业 / 项目': {
+        focus: '验收、定边界、补短板',
+        direct: ['先检查已有项目的缺口：需求、数据、交付物、负责人是否齐。', '适合发确认单、排期表、验收说明；不适合临时推翻方向。', '若要启动新项目，先做小样或灰度，不直接压大资源。'],
+        avoid: ['口头变更需求。', '为了赶进度跳过复核、测试或备份。'],
+        metric: '每个项目只保留 1 个主目标、1 个下一步动作、1 个验收标准。'
+      },
+      '财务 / 投资': {
+        focus: '守现金流、控仓位、等确认',
+        direct: ['先列出未来 7 天必须支付项，再判断可动用资金。', '已有仓位以复核止损/退出条件为主，不因短线波动追加杠杆。', '新机会只做观察或小额试探，必须写清买入理由、失效条件和最大亏损。'],
+        avoid: ['借钱、担保、加杠杆、情绪化补仓。', '只看收益率，不看期限、流动性和回撤。'],
+        metric: '高风险投入不超过可承受亏损额；任何单笔决策先设最大损失线。'
+      },
+      '感情 / 人际': {
+        focus: '说清事实，少猜动机',
+        direct: ['先把要沟通的问题写成事实、感受、请求三句。', '适合修复误会、同步预期、约定边界；不适合翻旧账。', '重要消息发出前读一遍，删掉讽刺、暗示和绝对化措辞。'],
+        avoid: ['用沉默或试探代替直接说明。', '疲惫时讨论长期关系或利益分配。'],
+        metric: '一次沟通只解决一个问题，并留下明确下一步。'
+      },
+      '健康 / 状态': {
+        focus: '降消耗、稳节律',
+        direct: ['把高强度任务拆成 45-60 分钟一段，中间安排恢复。', '今天优先保证饮水、正餐、睡眠窗口，不用意志力硬扛。', '若已经疲劳，改做整理、复盘、轻运动这类低阻力事项。'],
+        avoid: ['熬夜换进度。', '用咖啡因、情绪或临时兴奋替代恢复。'],
+        metric: '至少保留 1 个完整休息窗口；睡前 30 分钟不处理争议消息。'
+      },
+      '学习 / 创作': {
+        focus: '先成稿，再修辞',
+        direct: ['先写出可看的初版目录或样稿，不在开头反复打磨。', '旧资料、笔记、案例先归类，再提炼观点。', '发布前做一次事实核验和标题精简，避免堆概念。'],
+        avoid: ['只收集资料不产出。', '为了“高级感”使用空泛词。'],
+        metric: '今天至少产出 1 个可展示版本，而不是只留下素材。'
+      }
     };
+
 
     function hash(str) {
       let h = 2166136261;
@@ -372,6 +411,45 @@
       if (bazi.balance >= 5) return `五行覆盖完整，日常事务可多线协调；较旺为${bazi.strongest}，对应${elementNotes[bazi.strongest]}，较弱为${bazi.weakest}，宜用清单、复核或节奏管理补足。`;
       return `五行偏向${bazi.strongest}，处理相关事务较顺；${bazi.weakest}不足处容易形成疏漏，今日不宜凭感觉快速拍板。`;
     }
+    function overlapItems(source, keywords, fallbackCount = 3) {
+      return source.filter(item => keywords.some(key => item.includes(key))).slice(0, fallbackCount);
+    }
+    function adviceHtml(question, bazi, almanac) {
+      const profile = questionProfiles[question] || questionProfiles['今日综合'];
+      const dayStem = almanac.dayStemBranch[0];
+      const dayElement = stemElement[dayStem] || bazi.strongest;
+      const subjectKeywords = {
+        '今日综合': ['出行','修造','整理','解除','纳财','交易','会友','安床','移徙'],
+        '事业 / 项目': ['修造','动土','开市','交易','立券','纳财','出行','解除'],
+        '财务 / 投资': ['纳财','交易','立券','开市','求财'],
+        '感情 / 人际': ['嫁娶','会友','出行','移徙','纳采'],
+        '健康 / 状态': ['沐浴','解除','扫舍','安床','疗病'],
+        '学习 / 创作': ['开光','修造','出行','解除','入学']
+      }[question] || [];
+      const usefulYi = overlapItems(almanac.good, subjectKeywords, 4);
+      const riskyJi = overlapItems(almanac.bad, subjectKeywords, 4);
+      const elementLine = `日课为${almanac.dayStemBranch}，日干属${dayElement}；命盘五行较旺为${bazi.strongest}，较弱为${bazi.weakest}。`;
+      const yiText = usefulYi.length ? usefulYi.join('、') : '今日“宜”项与该事项无强匹配，宜做准备、复核、整理类动作';
+      const jiText = riskyJi.length ? riskyJi.join('、') : '未见直接冲突项，但仍以小规模推进为宜';
+      const almanacLine = `黄历取用：${yiText}；需避：${jiText}；${almanac.clash}。`;
+      const directionLine = `${almanac.directions}。若需要谈事、拜访、签小单，可优先取对应方位作心理锚点。`;
+      const balanceLine = bazi.balance >= 5
+        ? `五行覆盖较全，宜多方协调，但要防事项摊太开。`
+        : `${bazi.weakest}弱，涉及${elementNotes[bazi.weakest]}的环节要加复核。`;
+      return `
+        <div class="advice-summary">
+          <b>${profile.focus}</b><br>
+          <span class="basis">${elementLine}${balanceLine}<br>${almanacLine}</span>
+        </div>
+        <div class="advice-grid">
+          <div class="advice-box"><b>今天可做</b><ul class="list">${profile.direct.map(x => `<li>${x}</li>`).join('')}</ul></div>
+          <div class="advice-box"><b>今天少做</b><ul class="list">${profile.avoid.map(x => `<li>${x}</li>`).join('')}</ul></div>
+          <div class="advice-box"><b>量化边界</b><p>${profile.metric}</p></div>
+          <div class="advice-box"><b>日课取用</b><p>${directionLine}</p></div>
+          <div class="advice-box full"><b>落地判断</b><p>${usefulYi.length ? `若当前事项能对应“宜”里的${usefulYi.slice(0,2).join(' / ')}，可以推进到下一步。` : '今日黄历没有给出与该事项强相关的“宜”项，建议先做准备、核验、资料整理，不做不可逆承诺。'}${riskyJi.length ? ` 若事项接近“忌”里的${riskyJi.slice(0,2).join(' / ')}，则降低规模、延后关键承诺。` : ' 若必须推进，控制规模并留可撤回空间。'}</p></div>
+        </div>
+      `;
+    }
     function elementGrid(counts) {
       return Object.entries(counts).map(([el, count]) => `<div class="element"><span>${el}</span><b>${count}</b><small>${elementNotes[el].split('、')[0]}</small></div>`).join('');
     }
@@ -408,8 +486,8 @@
         const seed = hash(`${name}-${birthday}-${question}`);
         const bazi = analyzeBazi(birthday, birthMinute, birthHour, longitude, timezone, seed);
         const almanac = dailyAlmanac(new Date());
-        const advice = adviceMap[question] || adviceMap['今日综合'];
         const safeName = escapeHtml(name);
+        const adviceSection = adviceHtml(question, bazi, almanac);
 
         output.innerHTML = `
           <article>
@@ -443,10 +521,7 @@
 
               <section class="block"><h3>四、今日黄历</h3><div class="block-content">${almanacTable(almanac)}</div></section>
 
-              <section class="block"><h3>五、事项建议</h3><div class="block-content two-col">
-                <div><b>宜采用</b><ul class="list"><li>${advice[0]}</li><li>优先选择黄历“宜”中与当前事项接近的动作。</li></ul></div>
-                <div><b>宜规避</b><ul class="list"><li>${advice[1]}</li><li>若事项落在黄历“忌”类，建议降低风险敞口或延后关键动作。</li></ul></div>
-              </div></section>
+              <section class="block"><h3>五、事项建议</h3><div class="block-content">${adviceSection}</div></section>
             </div>
           </article>`;
       } catch (err) {
