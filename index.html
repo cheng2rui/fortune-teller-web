@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>四柱排盘 · 真太阳时与通书黄历</title>
+  <title>四柱排盘 · 真太阳时与今日黄历</title>
   <style>
     :root {
       color-scheme: light;
@@ -184,21 +184,21 @@
     <header>
       <div>
         <div class="eyebrow">BAZI · SOLAR TERM · ALMANAC</div>
-        <h1>四柱排盘与黄历日课</h1>
-        <p class="intro">按传统排盘顺序展示出生校正、四柱五行、盘面关系与今日黄历。重点给出可核对的依据和可执行的取用建议，不做夸张断语。</p>
+        <h1>四柱排盘与今日黄历</h1>
+        <p class="intro">填好出生信息，看看四柱、五行、真太阳时和今日黄历。只讲依据和提醒，不夸大，也不替你做决定。</p>
       </div>
-      <div class="stamp">通书<br>参考</div>
+      <div class="stamp">日课<br>参考</div>
     </header>
 
     <section class="layout">
       <form class="card form-card" id="fortuneForm">
-        <p class="section-title">排盘参数</p>
-        <label for="name">姓名 / 称呼</label>
+        <p class="section-title">先填这些</p>
+        <label for="name">称呼</label>
         <input id="name" name="name" placeholder="例如：大boss" maxlength="18" required />
 
         <div class="row">
           <div>
-            <label for="birthday">公历生日</label>
+            <label for="birthday">出生日期</label>
             <input id="birthday" name="birthday" type="date" required />
           </div>
           <div>
@@ -209,8 +209,8 @@
 
         <div class="row">
           <div>
-            <label for="birthPlace">出生地县 / 区</label>
-            <input id="birthPlace" name="birthPlace" list="placeHints" value="北京市东城区" placeholder="例如：深圳南山区 / 杭州西湖区 / 成都武侯区" required />
+            <label for="birthPlace">出生地</label>
+            <input id="birthPlace" name="birthPlace" list="placeHints" value="北京市东城区" placeholder="例如：深圳南山区 / 杭州西湖区" required />
             <datalist id="placeHints">
               <option value="北京市东城区"></option><option value="上海市黄浦区"></option><option value="广州市天河区"></option><option value="深圳市南山区"></option>
               <option value="杭州市西湖区"></option><option value="成都市武侯区"></option><option value="南京市玄武区"></option><option value="武汉市武昌区"></option>
@@ -218,7 +218,7 @@
             <input id="longitude" name="longitude" type="hidden" value="116.4074" />
             <input id="latitude" name="latitude" type="hidden" value="39.9042" />
             <input id="matchedPlace" name="matchedPlace" type="hidden" value="北京市东城区" />
-            <p class="geo-status ok" id="geoStatus">已匹配：北京市东城区｜经度 116.4074°</p>
+            <p class="geo-status ok" id="geoStatus">已带出：北京市东城区｜经度 116.4074°</p>
           </div>
           <div>
             <label for="timezone">时区</label>
@@ -230,10 +230,10 @@
           </div>
         </div>
 
-        <label for="birthHour">时柱取法</label>
+        <label for="birthHour">时辰</label>
         <select id="birthHour" name="birthHour">
-          <option value="auto">按真太阳时自动判定</option>
-          <option value="unknown">时辰未知</option>
+          <option value="auto">按出生时间换算</option>
+          <option value="unknown">不确定时辰</option>
           <option value="0">子时 23:00-00:59</option>
           <option value="2">丑时 01:00-02:59</option>
           <option value="4">寅时 03:00-04:59</option>
@@ -248,31 +248,31 @@
           <option value="22">亥时 21:00-22:59</option>
         </select>
 
-        <label for="question">关注事项</label>
+        <label for="question">想看看哪方面</label>
         <select id="question" name="question">
           <option>今日综合</option>
-          <option>事业 / 项目</option>
-          <option>财务 / 投资</option>
-          <option>感情 / 人际</option>
-          <option>健康 / 状态</option>
-          <option>学习 / 创作</option>
+          <option>事业和项目</option>
+          <option>财务和投资</option>
+          <option>感情和人际</option>
+          <option>健康和状态</option>
+          <option>学习和创作</option>
         </select>
 
-        <button type="submit">生成排盘</button>
-        <p class="note">算法说明：农历、节气、四柱、宜忌、冲煞与方位由 lunar-javascript 计算；出生地支持县/区名称自动匹配经度，真太阳时采用经度修正 + NOAA 均时差近似。结果仅作传统文化与日程规划参考。</p>
+        <button type="submit">开始排盘</button>
+        <p class="note">说明：本页只在浏览器里计算，不上传资料。出生地会带出经度，用来换算真太阳时；结果适合做民俗参考和日程提醒。</p>
       </form>
 
       <section class="card output" id="output">
         <div class="empty">
           <div>
-            <b>等待排盘</b>
-            填写出生日期、时间与出生地县/区后，生成四柱、五行、节气和今日黄历。
+            <b>填好后开始排盘</b>
+            填出生日期、时间和出生地，就能看到四柱、五行、节气和今日黄历。
           </div>
         </div>
       </section>
     </section>
 
-    <footer>本页为静态前端工具；不上传个人信息，不构成医学、投资、法律或人生重大决策建议。</footer>
+    <footer>本页不会上传个人信息。内容只作传统文化参考，不替代医学、投资、法律等专业判断。</footer>
   </main>
 
   <script src="./lunar.js"></script>
@@ -285,7 +285,7 @@
     const stemElement = { 甲:'木', 乙:'木', 丙:'火', 丁:'火', 戊:'土', 己:'土', 庚:'金', 辛:'金', 壬:'水', 癸:'水' };
     const branchElement = { 子:'水', 丑:'土', 寅:'木', 卯:'木', 辰:'土', 巳:'火', 午:'火', 未:'土', 申:'金', 酉:'金', 戌:'土', 亥:'水' };
     const elementNotes = {
-      木: '条理、计划、学习与生发', 火: '表达、曝光、热度与反应', 土: '承载、执行、稳定与收束', 金: '规则、效率、判断与边界', 水: '流动、信息、适应与复盘'
+      木: '条理、计划、学习与生发', 火: '表达、热度、灵感与反应', 土: '稳定、承接、耐心与收束', 金: '规则、效率、判断与边界', 水: '流动、信息、适应与复盘'
     };
     const monthElementSeason = { 寅:'木旺初春', 卯:'木旺仲春', 辰:'土旺春末', 巳:'火旺初夏', 午:'火旺仲夏', 未:'土旺夏末', 申:'金旺初秋', 酉:'金旺仲秋', 戌:'土旺秋末', 亥:'水旺初冬', 子:'水旺仲冬', 丑:'土旺冬末' };
     const stemCombines = { 甲己:'合土', 己甲:'合土', 乙庚:'合金', 庚乙:'合金', 丙辛:'合水', 辛丙:'合水', 丁壬:'合木', 壬丁:'合木', 戊癸:'合火', 癸戊:'合火' };
@@ -309,40 +309,40 @@
     };
     const questionProfiles = {
       '今日综合': {
-        focus: '收口与排序',
-        direct: ['把今日事项分成“必须完成 / 可推进 / 可放弃”三栏，先做必须完成项。', '上午适合定计划和处理文书，下午适合沟通确认，晚上只做复盘。', '任何新增事项都先问一句：是否影响今天的主线交付。'],
-        avoid: ['同时开三条以上战线。', '没有截止时间、负责人和验收口径的临时承诺。'],
-        metric: '至少完成 1 个可验收闭环；新增任务不超过 2 个。'
+        focus: '抓主线，少分心',
+        direct: ['把今天的事分成“必须做 / 顺手推 / 先放下”，先收必须做的。', '上午适合理清计划和处理文字，下午适合沟通确认，晚上简单复盘就好。', '临时冒出来的新事，先问一句：会不会打断今天的主线。'],
+        avoid: ['同时开太多摊子。', '没想清楚时间、责任和结果前，先别随口答应。'],
+        metric: '今天最好收掉 1 件能交代清楚的事；新开的坑别超过 2 个。'
       },
-      '事业 / 项目': {
-        focus: '验收、定边界、补短板',
-        direct: ['先检查已有项目的缺口：需求、数据、交付物、负责人是否齐。', '适合发确认单、排期表、验收说明；不适合临时推翻方向。', '若要启动新项目，先做小样或灰度，不直接压大资源。'],
-        avoid: ['口头变更需求。', '为了赶进度跳过复核、测试或备份。'],
-        metric: '每个项目只保留 1 个主目标、1 个下一步动作、1 个验收标准。'
+      '事业和项目': {
+        focus: '先收口，再扩张',
+        direct: ['先看手上的事哪里还缺：目标、资料、时间、谁来跟。', '适合把说好的事写清楚、排出顺序；不适合临时大改方向。', '新想法可以先做个小样，别一上来就铺很大。'],
+        avoid: ['只靠口头说变就变。', '为了赶进度跳过复核、测试或备份。'],
+        metric: '每个项目只留一个主目标、一个下一步、一个判断完成的标准。'
       },
-      '财务 / 投资': {
-        focus: '守现金流、控仓位、等确认',
-        direct: ['先列出未来 7 天必须支付项，再判断可动用资金。', '已有仓位以复核止损/退出条件为主，不因短线波动追加杠杆。', '新机会只做观察或小额试探，必须写清买入理由、失效条件和最大亏损。'],
-        avoid: ['借钱、担保、加杠杆、情绪化补仓。', '只看收益率，不看期限、流动性和回撤。'],
-        metric: '高风险投入不超过可承受亏损额；任何单笔决策先设最大损失线。'
+      '财务和投资': {
+        focus: '守住现金流，别急着加码',
+        direct: ['先列出未来 7 天一定要花的钱，再看手里真正能动的部分。', '已有仓位先复核退出条件，别因为一两次波动就冲动加码。', '新机会可以先观察或小额试试，动手前写清理由和最坏情况。'],
+        avoid: ['借钱、担保、加杠杆、情绪化补仓。', '只看能赚多少，不看多久能出来、亏起来能不能扛。'],
+        metric: '高风险投入别超过你能接受的亏损；每笔决定先写清最坏情况。'
       },
-      '感情 / 人际': {
-        focus: '说清事实，少猜动机',
-        direct: ['先把要沟通的问题写成事实、感受、请求三句。', '适合修复误会、同步预期、约定边界；不适合翻旧账。', '重要消息发出前读一遍，删掉讽刺、暗示和绝对化措辞。'],
-        avoid: ['用沉默或试探代替直接说明。', '疲惫时讨论长期关系或利益分配。'],
-        metric: '一次沟通只解决一个问题，并留下明确下一步。'
+      '感情和人际': {
+        focus: '把话说清，少靠猜',
+        direct: ['开口前先想清三件事：发生了什么、我在意什么、希望对方怎么配合。', '适合解释误会、同步期待、讲清边界；不适合翻旧账。', '重要消息发出前读一遍，删掉讽刺、试探和绝对化的话。'],
+        avoid: ['用沉默或试探代替直接说明。', '疲惫时谈长期关系或利益分配。'],
+        metric: '一次只谈一个问题，最后留一个明确下一步。'
       },
-      '健康 / 状态': {
-        focus: '降消耗、稳节律',
-        direct: ['把高强度任务拆成 45-60 分钟一段，中间安排恢复。', '今天优先保证饮水、正餐、睡眠窗口，不用意志力硬扛。', '若已经疲劳，改做整理、复盘、轻运动这类低阻力事项。'],
+      '健康和状态': {
+        focus: '少消耗，稳住节奏',
+        direct: ['高强度的事分段做，45-60 分钟就停一下。', '今天先保证喝水、正餐和睡眠窗口，别全靠意志力硬扛。', '如果已经累了，就做整理、复盘、轻运动这类低阻力的事。'],
         avoid: ['熬夜换进度。', '用咖啡因、情绪或临时兴奋替代恢复。'],
-        metric: '至少保留 1 个完整休息窗口；睡前 30 分钟不处理争议消息。'
+        metric: '至少留出一段完整休息；睡前 30 分钟别处理容易上头的消息。'
       },
-      '学习 / 创作': {
-        focus: '先成稿，再修辞',
-        direct: ['先写出可看的初版目录或样稿，不在开头反复打磨。', '旧资料、笔记、案例先归类，再提炼观点。', '发布前做一次事实核验和标题精简，避免堆概念。'],
+      '学习和创作': {
+        focus: '先做出来，再慢慢修',
+        direct: ['先写出一版能看的目录或样稿，别卡在开头反复打磨。', '旧资料、笔记、案例先归类，再提炼观点。', '发出去之前核一遍事实，标题也尽量短一点。'],
         avoid: ['只收集资料不产出。', '为了“高级感”使用空泛词。'],
-        metric: '今天至少产出 1 个可展示版本，而不是只留下素材。'
+        metric: '今天至少留下一版能给人看的东西，而不只是素材。'
       }
     };
 
@@ -361,7 +361,7 @@
       longitudeInput.value = Number(match.lng).toFixed(4);
       latitudeInput.value = Number(match.lat || 0).toFixed(4);
       matchedPlaceInput.value = match.name;
-      geoStatus.textContent = `已匹配：${match.name}｜经度 ${Number(match.lng).toFixed(4)}°｜${source}`;
+      geoStatus.textContent = `已带出：${match.name}｜经度 ${Number(match.lng).toFixed(4)}°｜${source}`;
       geoStatus.className = 'geo-status ok';
       return match;
     }
@@ -388,7 +388,7 @@
       } catch (_) {}
       const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=cn&accept-language=zh-CN&q=${encodeURIComponent(q)}`;
       const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
-      if (!resp.ok) throw new Error('地名服务暂不可用');
+      if (!resp.ok) throw new Error('暂时查不到这个地名');
       const rows = await resp.json();
       if (!rows || !rows.length) return null;
       const row = rows[0];
@@ -398,22 +398,22 @@
     }
     async function resolveBirthPlace(value, required = false) {
       const local = localPlaceMatch(value);
-      if (local) return applyPlaceMatch(local, '本地库');
+      if (local) return applyPlaceMatch(local, '常用地名');
       if (!normalizePlaceName(value)) {
-        geoStatus.textContent = '请输入出生地县/区，例如：深圳南山区';
+        geoStatus.textContent = '请填出生地，例如：深圳南山区';
         geoStatus.className = 'geo-status warn';
-        if (required) throw new Error('请填写出生地县/区。');
+        if (required) throw new Error('请先填写出生地。');
         return null;
       }
-      geoStatus.textContent = '正在匹配出生地经度…';
+      geoStatus.textContent = '正在查出生地…';
       geoStatus.className = 'geo-status';
       try {
         const remote = await remotePlaceMatch(value);
-        if (remote) return applyPlaceMatch(remote, '在线匹配');
+        if (remote) return applyPlaceMatch(remote, '在线地名');
       } catch (_) {}
-      geoStatus.textContent = '未能自动匹配，请补充城市 + 区县，例如：深圳市南山区。';
+      geoStatus.textContent = '这个地名还没认出来，可以写完整一点，比如：深圳市南山区。';
       geoStatus.className = 'geo-status warn';
-      if (required) throw new Error('出生地未匹配到经度，请输入更完整的城市 + 区县。');
+      if (required) throw new Error('出生地还没认出来，请把城市和区县写完整一点。');
       return null;
     }
     birthPlaceInput.addEventListener('input', () => {
@@ -433,7 +433,7 @@
     function getSolarClass() { return window.Solar || (window.Lunar && window.Lunar.Solar); }
     function buildSolar(date) {
       const SolarClass = getSolarClass();
-      if (!SolarClass || !SolarClass.fromYmdHms) throw new Error('历法库未加载完成，请刷新后重试。');
+      if (!SolarClass || !SolarClass.fromYmdHms) throw new Error('页面还没加载完，请刷新后再试。');
       return SolarClass.fromYmdHms(date.getFullYear(), date.getMonth()+1, date.getDate(), date.getHours(), date.getMinutes(), 0);
     }
     function dayOfYear(date) { return Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000); }
@@ -480,9 +480,9 @@
       const localDate = new Date(year, month - 1, day, hour, minute, 0);
       const trueSolar = trueSolarDate(localDate, longitude, timezone);
       let baziDate = trueSolar.date;
-      let source = '真太阳时自动校正';
-      if (birthHour === 'unknown') { baziDate = new Date(year, month - 1, day, (seed % 12) * 2, 0, 0); source = '时辰未知：仅作近似参考'; }
-      else if (birthHour !== 'auto') { baziDate = new Date(year, month - 1, day, Number(birthHour), 0, 0); source = '手动指定时辰'; }
+      let source = '已按真太阳时换算';
+      if (birthHour === 'unknown') { baziDate = new Date(year, month - 1, day, (seed % 12) * 2, 0, 0); source = '不确定时辰：仅作近似参考'; }
+      else if (birthHour !== 'auto') { baziDate = new Date(year, month - 1, day, Number(birthHour), 0, 0); source = '按你选的时辰排盘'; }
       const solar = buildSolar(baziDate);
       const lunar = solar.getLunar();
       const pillars = lunar.getBaZi();
@@ -519,8 +519,8 @@
       };
     }
     function baziReading(bazi) {
-      if (bazi.balance >= 5) return `五行覆盖完整，日常事务可多线协调；较旺为${bazi.strongest}，对应${elementNotes[bazi.strongest]}，较弱为${bazi.weakest}，宜用清单、复核或节奏管理补足。`;
-      return `五行偏向${bazi.strongest}，处理相关事务较顺；${bazi.weakest}不足处容易形成疏漏，今日不宜凭感觉快速拍板。`;
+      if (bazi.balance >= 5) return `五行比较齐，事情可以并行处理；较旺为${bazi.strongest}，对应${elementNotes[bazi.strongest]}，较弱为${bazi.weakest}，适合用清单、复核和节奏来补足。`;
+      return `五行偏向${bazi.strongest}，相关事情会比较顺手；${bazi.weakest}不足的地方容易漏细节，今天别只凭感觉快速拍板。`;
     }
     function relationSummary(pillars) {
       const labels = ['年','月','日','时'];
@@ -544,20 +544,20 @@
       const monthBranch = bazi.pillars[1][1];
       const monthSeason = monthElementSeason[monthBranch] || `${branchElement[monthBranch]}气`;
       const sameCount = bazi.counts[dayElement] || 0;
-      const level = sameCount >= 3 ? '同类根气较足' : sameCount <= 1 ? '同类偏少，需靠节奏与资源补位' : '同类力量中等';
+      const level = sameCount >= 3 ? '同类根气较足' : sameCount <= 1 ? '同类偏少，要靠节奏和外部资源补位' : '同类力量中等';
       return { dayMaster, dayElement, monthBranch, monthSeason, sameCount, level };
     }
     function baziInsightHtml(bazi) {
       const rel = relationSummary(bazi.pillars);
       const strength = strengthHint(bazi);
       const relTags = [...rel.stemHits, ...rel.branchHits];
-      const relationText = relTags.length ? relTags.map(x => `<span>${x}</span>`).join('') : '<span>四柱之间未见明显六合、六冲、相害或天干五合</span>';
+      const relationText = relTags.length ? relTags.map(x => `<span>${x}</span>`).join('') : '<span>四柱之间没有特别明显的合冲刑害</span>';
       return `
         <div class="insight-grid">
-          <div class="insight"><b>日主与月令</b>日主为${strength.dayMaster}${strength.dayElement}，生于${strength.monthBranch}月（${strength.monthSeason}）。${strength.level}；判断时优先看月令，再看四柱五行分布。</div>
-          <div class="insight"><b>盘面短板</b>${bazi.strongest}偏旺、${bazi.weakest}偏弱。今日涉及${elementNotes[bazi.weakest]}的事项，要把流程、凭证、时间节点写清楚。</div>
+          <div class="insight"><b>日主状态</b>日主为${strength.dayMaster}${strength.dayElement}，生于${strength.monthBranch}月（${strength.monthSeason}）。${strength.level}；先看月令，再看四柱五行分布。</div>
+          <div class="insight"><b>容易漏的地方</b>${bazi.strongest}偏旺、${bazi.weakest}偏弱。今日涉及${elementNotes[bazi.weakest]}的事，最好把流程、凭证和时间点写清楚。</div>
           <div class="insight"><b>四柱关系</b><div class="relation-tags">${relationText}</div></div>
-          <div class="insight"><b>取用方向</b>顺${bazi.strongest}之势可推进${elementNotes[bazi.strongest]}；补${bazi.weakest}则靠复核、留痕、找人校验，不靠临场发挥。</div>
+          <div class="insight"><b>取用提醒</b>顺${bazi.strongest}之势可推进${elementNotes[bazi.strongest]}；补${bazi.weakest}则靠复核、留痕、找人校验，别全靠临场发挥。</div>
         </div>`;
     }
     function overlapItems(source, keywords, fallbackCount = 3) {
@@ -569,33 +569,33 @@
       const dayElement = stemElement[dayStem] || bazi.strongest;
       const subjectKeywords = {
         '今日综合': ['出行','修造','整理','解除','纳财','交易','会友','安床','移徙'],
-        '事业 / 项目': ['修造','动土','开市','交易','立券','纳财','出行','解除'],
-        '财务 / 投资': ['纳财','交易','立券','开市','求财'],
-        '感情 / 人际': ['嫁娶','会友','出行','移徙','纳采'],
-        '健康 / 状态': ['沐浴','解除','扫舍','安床','疗病'],
-        '学习 / 创作': ['开光','修造','出行','解除','入学']
+        '事业和项目': ['修造','动土','开市','交易','立券','纳财','出行','解除'],
+        '财务和投资': ['纳财','交易','立券','开市','求财'],
+        '感情和人际': ['嫁娶','会友','出行','移徙','纳采'],
+        '健康和状态': ['沐浴','解除','扫舍','安床','疗病'],
+        '学习和创作': ['开光','修造','出行','解除','入学']
       }[question] || [];
       const usefulYi = overlapItems(almanac.good, subjectKeywords, 4);
       const riskyJi = overlapItems(almanac.bad, subjectKeywords, 4);
       const elementLine = `日课为${almanac.dayStemBranch}，日干属${dayElement}；命盘五行较旺为${bazi.strongest}，较弱为${bazi.weakest}。`;
-      const yiText = usefulYi.length ? usefulYi.join('、') : '今日“宜”项与该事项无强匹配，宜做准备、复核、整理类动作';
-      const jiText = riskyJi.length ? riskyJi.join('、') : '未见直接冲突项，但仍以小规模推进为宜';
-      const almanacLine = `黄历取用：${yiText}；需避：${jiText}；${almanac.clash}。`;
-      const directionLine = `${almanac.directions}。若需要谈事、拜访、签小单，可优先取对应方位作心理锚点。`;
+      const yiText = usefulYi.length ? usefulYi.join('、') : '今天的“宜”里没有特别贴合的项，适合先做准备、复核和整理';
+      const jiText = riskyJi.length ? riskyJi.join('、') : '没有明显冲突，但还是小步推进更稳';
+      const almanacLine = `黄历提示：${yiText}；少碰：${jiText}；${almanac.clash}。`;
+      const directionLine = `${almanac.directions}。如果要谈事、拜访或签小单，可以把对应方位当作一个提醒。`;
       const balanceLine = bazi.balance >= 5
-        ? `五行覆盖较全，宜多方协调，但要防事项摊太开。`
-        : `${bazi.weakest}弱，涉及${elementNotes[bazi.weakest]}的环节要加复核。`;
+        ? `五行比较齐，适合协调多方，但别把摊子铺太大。`
+        : `${bazi.weakest}弱，涉及${elementNotes[bazi.weakest]}的环节记得多复核一遍。`;
       return `
         <div class="advice-summary">
           <b>${profile.focus}</b><br>
           <span class="basis">${elementLine}${balanceLine}<br>${almanacLine}</span>
         </div>
         <div class="advice-grid">
-          <div class="advice-box"><b>今天可做</b><ul class="list">${profile.direct.map(x => `<li>${x}</li>`).join('')}</ul></div>
-          <div class="advice-box"><b>今天少做</b><ul class="list">${profile.avoid.map(x => `<li>${x}</li>`).join('')}</ul></div>
-          <div class="advice-box"><b>量化边界</b><p>${profile.metric}</p></div>
-          <div class="advice-box"><b>日课取用</b><p>${directionLine}</p></div>
-          <div class="advice-box full"><b>落地判断</b><p>${usefulYi.length ? `若当前事项能对应“宜”里的${usefulYi.slice(0,2).join(' / ')}，可以推进到下一步。` : '今日黄历没有给出与该事项强相关的“宜”项，建议先做准备、核验、资料整理，不做不可逆承诺。'}${riskyJi.length ? ` 若事项接近“忌”里的${riskyJi.slice(0,2).join(' / ')}，则降低规模、延后关键承诺。` : ' 若必须推进，控制规模并留可撤回空间。'}</p></div>
+          <div class="advice-box"><b>今天适合</b><ul class="list">${profile.direct.map(x => `<li>${x}</li>`).join('')}</ul></div>
+          <div class="advice-box"><b>今天少碰</b><ul class="list">${profile.avoid.map(x => `<li>${x}</li>`).join('')}</ul></div>
+          <div class="advice-box"><b>拿捏分寸</b><p>${profile.metric}</p></div>
+          <div class="advice-box"><b>黄历提醒</b><p>${directionLine}</p></div>
+          <div class="advice-box full"><b>怎么用</b><p>${usefulYi.length ? `如果这件事正好对应“宜”里的${usefulYi.slice(0,2).join(' / ')}，可以往下一步推。` : '今天黄历里没有特别贴合的“宜”，先做准备、核验和资料整理，别急着做不可逆承诺。'}${riskyJi.length ? ` 如果事情接近“忌”里的${riskyJi.slice(0,2).join(' / ')}，就缩小规模，关键承诺往后放。` : ' 如果必须推进，就控制规模，留点回旋余地。'}</p></div>
         </div>
       `;
     }
@@ -644,21 +644,21 @@
         output.innerHTML = `
           <article>
             <div class="report-head">
-              <h2>${safeName}｜四柱排盘</h2>
+              <h2>${safeName}｜今日排盘</h2>
               <div class="meta">
                 <span class="tag">${bazi.source}</span>
                 <span class="tag">${bazi.timeBranch}</span>
                 <span class="tag">生肖：${bazi.zodiacAnimal}</span>
                 <span class="tag">出生地：${escapeHtml(placeName)}</span>
-                <span class="tag">关注：${question}</span>
+                <span class="tag">想看：${question}</span>
               </div>
             </div>
             <div class="report-body">
-              <section class="block"><h3>一、真太阳时校正</h3><div class="block-content">
-                标准时间：${formatDateTime(bazi.localDate)}<br>
-                真太阳时：${formatDateTime(bazi.trueSolarDate)}<br>
+              <section class="block"><h3>一、真太阳时</h3><div class="block-content">
+                出生时间：${formatDateTime(bazi.localDate)}<br>
+                换算后：${formatDateTime(bazi.trueSolarDate)}<br>
                 出生地：${escapeHtml(placeName)}｜经度 ${longitude.toFixed(4)}°${latitude ? `｜纬度 ${latitude.toFixed(4)}°` : ''}｜标准时区 UTC+${timezone}<br>
-                经度修正 ${bazi.longitudeCorrection.toFixed(1)} 分钟｜均时差 ${bazi.eot.toFixed(1)} 分钟｜合计 ${bazi.trueSolarOffset.toFixed(1)} 分钟
+                经度差 ${bazi.longitudeCorrection.toFixed(1)} 分钟｜均时差 ${bazi.eot.toFixed(1)} 分钟｜合计 ${bazi.trueSolarOffset.toFixed(1)} 分钟
               </div></section>
 
               <section class="block"><h3>二、生辰八字</h3><div class="block-content">
@@ -667,20 +667,20 @@
                 <p>节气：上一节气 ${solarOfJieQi(bazi.prevJieQi)}｜下一节气 ${solarOfJieQi(bazi.nextJieQi)}</p>
               </div></section>
 
-              <section class="block"><h3>三、五行分布</h3><div class="block-content">
+              <section class="block"><h3>三、五行</h3><div class="block-content">
                 <div class="element-grid">${elementGrid(bazi.counts)}</div>
                 <p>${baziReading(bazi)}</p>
               </div></section>
 
-              <section class="block"><h3>四、盘面要点</h3><div class="block-content">${baziInsightHtml(bazi)}</div></section>
+              <section class="block"><h3>四、盘面提醒</h3><div class="block-content">${baziInsightHtml(bazi)}</div></section>
 
               <section class="block"><h3>五、今日黄历</h3><div class="block-content">${almanacTable(almanac)}</div></section>
 
-              <section class="block"><h3>六、事项建议</h3><div class="block-content">${adviceSection}</div></section>
+              <section class="block"><h3>六、今天怎么安排</h3><div class="block-content">${adviceSection}</div></section>
             </div>
           </article>`;
       } catch (err) {
-        output.innerHTML = `<div class="empty"><div><b>排盘失败</b>${escapeHtml(err.message || err)}</div></div>`;
+        output.innerHTML = `<div class="empty"><div><b>排盘没成功</b>${escapeHtml(err.message || err)}</div></div>`;
       }
     });
   </script>
