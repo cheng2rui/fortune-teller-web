@@ -2,300 +2,187 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>玄灵命理 · 今日运势与黄历择日</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>四柱排盘 · 真太阳时与通书黄历</title>
   <style>
     :root {
-      --bg1: #0d1321;
-      --bg2: #17213a;
-      --card: rgba(255,255,255,.085);
-      --card2: rgba(255,255,255,.13);
-      --text: #f7f2e8;
-      --muted: #c8c1b2;
-      --gold: #d9b56f;
-      --pink: #b9895a;
-      --cyan: #8ec5c0;
-      --danger: #ff8f8f;
-      --ok: #8cffc1;
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color-scheme: light;
+      --bg: #f6f1e8;
+      --paper: #fffdf8;
+      --paper-2: #fbf6ec;
+      --ink: #241d17;
+      --muted: #756a5d;
+      --line: #ded0bd;
+      --line-strong: #c2aa8a;
+      --red: #9f2f2f;
+      --red-dark: #762424;
+      --gold: #a77938;
+      --green: #597a4a;
+      --shadow: 0 18px 50px rgba(79, 54, 28, .10);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     }
 
     * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
+    html { -webkit-text-size-adjust: 100%; background: var(--bg); }
     body {
       margin: 0;
-      min-height: 100vh;
-      color: var(--text);
+      color: var(--ink);
       background:
-        radial-gradient(circle at 18% 12%, rgba(217,181,111,.22), transparent 28%),
-        radial-gradient(circle at 86% 8%, rgba(142,197,192,.18), transparent 31%),
-        radial-gradient(circle at 50% 100%, rgba(185,137,90,.16), transparent 38%),
-        linear-gradient(135deg, var(--bg1), var(--bg2) 62%, #101827);
-      overflow-x: hidden;
+        linear-gradient(90deg, rgba(159,47,47,.045) 1px, transparent 1px) 0 0 / 28px 28px,
+        linear-gradient(rgba(159,47,47,.035) 1px, transparent 1px) 0 0 / 28px 28px,
+        radial-gradient(circle at 20% -10%, rgba(167,121,56,.13), transparent 32%),
+        var(--bg);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
-      touch-action: manipulation;
     }
 
-    .stars, .stars::before, .stars::after {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      content: "";
-      background-image:
-        radial-gradient(rgba(255,255,255,.62) 1px, transparent 1.4px),
-        radial-gradient(rgba(217,181,111,.38) 1px, transparent 1.2px);
-      background-size: 90px 90px, 140px 140px;
-      background-position: 0 0, 40px 60px;
-      animation: drift 28s linear infinite;
-      opacity: .55;
-    }
-    .stars::before { animation-duration: 45s; opacity: .35; transform: scale(1.4); }
-    .stars::after { animation-duration: 70s; opacity: .25; transform: scale(2); }
-    @keyframes drift { from { transform: translateY(0); } to { transform: translateY(-90px); } }
-
-    main {
-      width: min(980px, calc(100% - 32px));
+    .wrap {
+      width: min(1120px, calc(100% - 28px));
       margin: 0 auto;
-      padding: max(42px, env(safe-area-inset-top)) 0 max(54px, env(safe-area-inset-bottom));
-      position: relative;
-      z-index: 1;
+      padding: max(22px, env(safe-area-inset-top)) 0 max(34px, env(safe-area-inset-bottom));
     }
 
-    .hero { text-align: center; margin-bottom: 28px; }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border: 1px solid rgba(255,255,255,.22);
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
-      color: var(--muted);
-      backdrop-filter: blur(12px);
-      font-size: 14px;
-    }
-    h1 {
-      margin: 18px 0 8px;
-      font-size: clamp(34px, 7vw, 72px);
-      line-height: 1;
-      letter-spacing: -2px;
-      text-shadow: 0 0 28px rgba(217,181,111,.18);
-    }
-    .subtitle { margin: 0 auto; color: var(--muted); max-width: 680px; line-height: 1.8; }
-
-    .grid {
+    header {
       display: grid;
-      grid-template-columns: 1fr 1.1fr;
-      gap: 20px;
-      align-items: start;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      padding: 12px 0 20px;
+      border-bottom: 2px solid var(--line-strong);
+      margin-bottom: 18px;
     }
 
-    .panel {
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 24px;
-      background: linear-gradient(180deg, var(--card2), var(--card));
-      box-shadow: 0 22px 70px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.1);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      padding: 22px;
+    .eyebrow { color: var(--red); font-weight: 700; letter-spacing: .16em; font-size: 12px; }
+    h1 { margin: 5px 0 0; font-size: clamp(28px, 5.8vw, 48px); letter-spacing: -.04em; line-height: 1.05; }
+    .intro { margin: 8px 0 0; color: var(--muted); line-height: 1.7; max-width: 760px; font-size: 14px; }
+    .stamp {
+      width: 70px;
+      height: 70px;
+      border: 3px solid var(--red);
+      color: var(--red);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      line-height: 1.1;
+      text-align: center;
+      transform: rotate(-6deg);
+      background: rgba(255,255,255,.45);
     }
 
-    label { display: block; margin: 14px 0 8px; color: #f6e9ff; font-weight: 700; }
-    input, select {
-      width: 100%;
-      min-height: 50px;
-      appearance: none;
-      -webkit-appearance: none;
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 16px;
-      padding: 14px 15px;
-      color: var(--text);
-      background: rgba(10, 6, 20, .45);
-      outline: none;
+    .layout { display: grid; grid-template-columns: 370px 1fr; gap: 18px; align-items: start; }
+    .card {
+      background: linear-gradient(180deg, var(--paper), var(--paper-2));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+    .form-card { padding: 18px; position: sticky; top: 14px; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
       font-size: 16px;
+      font-weight: 800;
     }
-    input:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 0 4px rgba(130,247,255,.12); }
-    select {
-      background-image: linear-gradient(45deg, transparent 50%, var(--gold) 50%), linear-gradient(135deg, var(--gold) 50%, transparent 50%);
-      background-position: calc(100% - 22px) 22px, calc(100% - 16px) 22px;
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-      padding-right: 40px;
-    }
-    input[type="date"]::-webkit-date-and-time-value { text-align: left; }
-    option { color: #25103a; }
+    .section-title::before { content: ""; width: 5px; height: 18px; border-radius: 99px; background: var(--red); }
 
+    label { display: block; margin: 13px 0 7px; color: #3b3127; font-size: 14px; font-weight: 700; }
+    input, select {
+      width: 100%; min-height: 48px; border: 1px solid var(--line); border-radius: 12px;
+      padding: 12px 13px; color: var(--ink); background: #fffaf2; outline: none; font-size: 16px;
+      appearance: none; -webkit-appearance: none;
+    }
+    input:focus, select:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(159,47,47,.10); }
+    select {
+      background-image: linear-gradient(45deg, transparent 50%, var(--red) 50%), linear-gradient(135deg, var(--red) 50%, transparent 50%);
+      background-position: calc(100% - 21px) 21px, calc(100% - 15px) 21px;
+      background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px;
+    }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     button {
-      width: 100%;
-      margin-top: 18px;
-      border: 0;
-      border-radius: 18px;
-      padding: 16px 18px;
-      min-height: 54px;
-      cursor: pointer;
-      color: #271000;
-      font-size: 17px;
-      font-weight: 900;
-      letter-spacing: .5px;
-      background: linear-gradient(135deg, #f1d492, #d7a760 52%, #a9774a);
-      box-shadow: 0 14px 34px rgba(160,112,58,.3);
-      transition: transform .16s ease, box-shadow .16s ease;
+      width: 100%; min-height: 52px; margin-top: 17px; border: 0; border-radius: 12px;
+      color: #fff; background: linear-gradient(135deg, var(--red), var(--red-dark));
+      font-size: 16px; font-weight: 800; letter-spacing: .04em; cursor: pointer;
+      box-shadow: 0 12px 26px rgba(118,36,36,.18);
     }
-    button:hover { transform: translateY(-2px); box-shadow: 0 18px 42px rgba(255,157,66,.38); }
-    button:active { transform: translateY(0); }
+    button:active { transform: translateY(1px); }
+    .note { margin: 12px 0 0; color: var(--muted); line-height: 1.7; font-size: 12px; }
 
-    .hint { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 14px 0 0; }
+    .output { min-height: 560px; overflow: hidden; }
+    .empty { min-height: 560px; display: grid; place-items: center; padding: 34px; text-align: center; color: var(--muted); }
+    .empty b { display: block; color: var(--ink); font-size: 20px; margin-bottom: 8px; }
 
-    .crystal {
-      width: 156px;
-      aspect-ratio: 1;
-      margin: 2px auto 18px;
-      border-radius: 28px;
-      background:
-        linear-gradient(135deg, rgba(217,181,111,.22), rgba(142,197,192,.12)),
-        radial-gradient(circle at 50% 46%, rgba(255,255,255,.12), transparent 34%),
-        rgba(7,12,22,.42);
-      border: 1px solid rgba(217,181,111,.28);
-      box-shadow: 0 18px 45px rgba(0,0,0,.26), inset 0 0 34px rgba(255,255,255,.08);
-      position: relative;
-      animation: pulse 4.8s ease-in-out infinite;
-    }
-    .crystal::after {
-      content: "卦";
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      font-size: 58px;
-      font-family: Georgia, "Times New Roman", serif;
-      color: rgba(241,212,146,.92);
-      text-shadow: 0 0 22px rgba(217,181,111,.24);
-    }
-    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+    .report-head { padding: 20px 22px; border-bottom: 1px solid var(--line); background: rgba(159,47,47,.045); }
+    .report-head h2 { margin: 0; font-size: clamp(22px, 4vw, 32px); }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag { border: 1px solid var(--line-strong); background: rgba(255,255,255,.55); border-radius: 999px; padding: 6px 10px; color: #4a3e32; font-size: 12px; }
 
-    .result.hidden { display: none; }
-    .result h2 { margin: 4px 0 12px; font-size: 28px; }
-    .pillbox { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
-    .pill {
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.15);
-      color: #f9eaff;
-      font-size: 13px;
-    }
+    .report-body { padding: 18px; display: grid; gap: 14px; }
+    .block { border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.58); overflow: hidden; }
+    .block h3 { margin: 0; padding: 12px 14px; color: var(--red-dark); background: rgba(167,121,56,.08); border-bottom: 1px solid var(--line); font-size: 15px; }
+    .block-content { padding: 14px; line-height: 1.85; color: #342b23; }
 
-    .score-list { display: grid; gap: 10px; margin: 18px 0; }
-    .score { display: grid; grid-template-columns: 72px 1fr 42px; gap: 10px; align-items: center; color: var(--muted); font-size: 14px; }
-    .bar { height: 10px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,.14); }
-    .bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cyan), var(--gold), var(--pink)); width: 0; transition: width .7s ease; }
+    .pillar-table, .almanac-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .pillar-table th, .pillar-table td, .almanac-table th, .almanac-table td { border: 1px solid var(--line); padding: 10px 8px; vertical-align: top; }
+    .pillar-table th, .almanac-table th { background: #f3eadc; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .pillar { font-size: 24px; color: var(--red-dark); font-weight: 900; letter-spacing: .08em; }
+    .sub { color: var(--muted); font-size: 12px; margin-top: 3px; }
 
-    .fortune-card {
-      margin-top: 14px;
-      padding: 16px;
-      border-radius: 20px;
-      background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(255,255,255,.055));
-      border: 1px solid rgba(255,255,255,.12);
-      line-height: 1.85;
-      color: #fff7ff;
-    }
-    .fortune-card strong { color: var(--gold); }
-    .small-title { color: var(--gold); font-weight: 900; margin-bottom: 6px; letter-spacing: .4px; }
+    .element-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
+    .element { border: 1px solid var(--line); border-radius: 12px; padding: 10px; text-align: center; background: #fffaf2; }
+    .element b { display: block; color: var(--red-dark); font-size: 20px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .list { margin: 0; padding-left: 1.2em; }
+    .list li { margin: 4px 0; }
+    .good { color: var(--green); font-weight: 700; }
+    .bad { color: var(--red-dark); font-weight: 700; }
+    footer { margin-top: 18px; color: var(--muted); font-size: 12px; text-align: center; line-height: 1.7; }
 
-    .mystic-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .mystic-cell {
-      padding: 12px 10px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.1);
-      border: 1px solid rgba(255,255,255,.14);
-      text-align: center;
-    }
-    .mystic-cell .label { color: var(--muted); font-size: 12px; margin-bottom: 5px; }
-    .mystic-cell .pillar { color: var(--gold); font-size: 20px; font-weight: 900; letter-spacing: 1px; }
-    .element-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .element-tag {
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(130,247,255,.1);
-      border: 1px solid rgba(130,247,255,.18);
-      color: #eaffff;
-      font-size: 13px;
-    }
-    .almanac-list { display: grid; gap: 9px; margin-top: 10px; }
-    .almanac-row {
-      display: grid;
-      grid-template-columns: 56px 1fr;
-      gap: 10px;
-      align-items: start;
-      padding: 9px 10px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.1);
-    }
-    .almanac-row b { color: var(--gold); }
-    .almanac-row span { color: #fff7ff; }
-
-    .empty {
-      min-height: 420px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      color: var(--muted);
-    }
-    .empty .big { font-size: 58px; display: block; margin-bottom: 12px; }
-
-    footer { text-align: center; color: rgba(255,255,255,.45); margin-top: 22px; font-size: 12px; }
-
-    @media (max-width: 820px) {
-      main { width: min(100% - 24px, 520px); padding-top: max(24px, env(safe-area-inset-top)); }
-      .grid { grid-template-columns: 1fr; gap: 16px; }
-      .row { grid-template-columns: 1fr; }
-      .panel { border-radius: 24px; padding: 18px; }
+    @media (max-width: 860px) {
+      .wrap { width: min(100% - 20px, 620px); padding-top: max(14px, env(safe-area-inset-top)); }
+      header { grid-template-columns: 1fr; gap: 10px; }
+      .stamp { width: 56px; height: 56px; font-size: 13px; justify-self: start; }
+      .layout { grid-template-columns: 1fr; }
+      .form-card { position: static; }
       .empty { min-height: 260px; }
-      .crystal { width: 136px; }
-      h1 { letter-spacing: -1px; }
-      .subtitle { font-size: 14px; line-height: 1.7; }
-      .mystic-grid { grid-template-columns: repeat(2, 1fr); }
-      .score { grid-template-columns: 58px 1fr 38px; }
-      .almanac-row { grid-template-columns: 48px 1fr; }
+      .output { min-height: 260px; }
+      .two-col { grid-template-columns: 1fr; }
     }
-
-    @media (max-width: 420px) {
-      main { width: calc(100% - 18px); padding-top: max(18px, env(safe-area-inset-top)); }
-      .badge { font-size: 12px; padding: 7px 10px; }
-      .panel { padding: 15px; border-radius: 22px; }
-      input, select { font-size: 16px; border-radius: 14px; }
-      .fortune-card { padding: 14px; border-radius: 18px; }
-      .pill { font-size: 12px; }
+    @media (max-width: 460px) {
+      .wrap { width: calc(100% - 14px); }
+      .row { grid-template-columns: 1fr; gap: 0; }
+      .card { border-radius: 14px; }
+      .form-card, .report-body { padding: 14px; }
+      .report-head { padding: 17px 15px; }
+      .pillar { font-size: 20px; }
+      .pillar-table th, .pillar-table td, .almanac-table th, .almanac-table td { padding: 8px 6px; }
+      .element-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+      .element { padding: 8px 4px; }
+      .element b { font-size: 17px; }
     }
   </style>
 </head>
 <body>
-  <div class="stars"></div>
-  <main>
-    <section class="hero">
-      <div class="badge">📜 今日运势 · 八字五行 · 黄历择日</div>
-      <h1>玄灵命理</h1>
-      <p class="subtitle">基于真太阳时、精确农历、节气月令、干支四柱与老黄历规则，生成结构化日运参考。适合用于每日规划、事项取舍和行动节奏判断。</p>
-    </section>
+  <main class="wrap">
+    <header>
+      <div>
+        <div class="eyebrow">BAZI · SOLAR TERM · ALMANAC</div>
+        <h1>四柱排盘与黄历日课</h1>
+        <p class="intro">参考开源八字排盘工具的呈现方式：先给出生信息、真太阳时校正、四柱与五行，再列今日黄历和事项建议。页面只做结构化排盘与传统文化参考，不使用“玄学包装式”文案。</p>
+      </div>
+      <div class="stamp">通书<br>参考</div>
+    </header>
 
-    <section class="grid">
-      <form class="panel" id="fortuneForm">
-        <div class="crystal" aria-hidden="true"></div>
-
+    <section class="layout">
+      <form class="card form-card" id="fortuneForm">
+        <p class="section-title">排盘参数</p>
         <label for="name">姓名 / 称呼</label>
         <input id="name" name="name" placeholder="例如：大boss" maxlength="18" required />
 
         <div class="row">
           <div>
-            <label for="birthday">生日</label>
+            <label for="birthday">公历生日</label>
             <input id="birthday" name="birthday" type="date" required />
           </div>
           <div>
@@ -319,22 +206,10 @@
           </div>
         </div>
 
-        <div class="row">
-          <div>
-            <label for="zodiac">星座</label>
-            <select id="zodiac" name="zodiac">
-              <option>自动感应</option>
-              <option>白羊座</option><option>金牛座</option><option>双子座</option><option>巨蟹座</option>
-              <option>狮子座</option><option>处女座</option><option>天秤座</option><option>天蝎座</option>
-              <option>射手座</option><option>摩羯座</option><option>水瓶座</option><option>双鱼座</option>
-            </select>
-          </div>
-        </div>
-
-        <label for="birthHour">出生时辰（可由出生时间自动校正）</label>
+        <label for="birthHour">时柱取法</label>
         <select id="birthHour" name="birthHour">
           <option value="auto">按真太阳时自动判定</option>
-          <option value="unknown">不知道 / 随缘起卦</option>
+          <option value="unknown">时辰未知</option>
           <option value="0">子时 23:00-00:59</option>
           <option value="2">丑时 01:00-02:59</option>
           <option value="4">寅时 03:00-04:59</option>
@@ -351,29 +226,29 @@
 
         <label for="question">关注事项</label>
         <select id="question" name="question">
-          <option>今日综合运势</option>
+          <option>今日综合</option>
           <option>事业 / 项目</option>
-          <option>财运 / 投资</option>
+          <option>财务 / 投资</option>
           <option>感情 / 人际</option>
           <option>健康 / 状态</option>
-          <option>灵感 / 创作</option>
+          <option>学习 / 创作</option>
         </select>
 
-        <button type="submit">生成今日命理分析</button>
-        <p class="hint">说明：排盘使用 lunar-javascript 历法库计算农历、节气、干支、宜忌、神煞与方位；出生时柱按经度与均时差校正为真太阳时后取时辰。结果用于规划参考，不替代现实决策。</p>
+        <button type="submit">生成排盘</button>
+        <p class="note">算法说明：农历、节气、四柱、宜忌、冲煞与方位由 lunar-javascript 计算；真太阳时采用经度修正 + NOAA 均时差近似。结果仅作传统文化与日程规划参考。</p>
       </form>
 
-      <section class="panel" id="output">
+      <section class="card output" id="output">
         <div class="empty">
           <div>
-            <span class="big">☯</span>
-            <p>请填写左侧信息，生成今日命理分析与黄历宜忌。</p>
+            <b>等待排盘</b>
+            填写出生日期、时间与经度后，生成四柱、五行、节气和今日黄历。
           </div>
         </div>
       </section>
     </section>
 
-    <footer>Daily Metaphysics Reference · 仅作规划参考，不替代现实决策</footer>
+    <footer>本页为静态前端工具；不上传个人信息，不构成医学、投资、法律或人生重大决策建议。</footer>
   </main>
 
   <script src="./lunar.js"></script>
@@ -381,119 +256,41 @@
     const form = document.querySelector('#fortuneForm');
     const output = document.querySelector('#output');
 
-    const poems = [
-      '气机渐开，宜审势而动，先稳根基，再谋推进。',
-      '今日主线在执行与校准，贵在明确边界、减少内耗。',
-      '局势未必全明，宜先取可控之事，逐步扩大战果。',
-      '动中有机，静中有守；小处见章法，大处见趋势。',
-      '细节为今日关键，复核、整理、收口可增助力。',
-      '外部助力可得，但仍需以清晰计划承接机会。'
-    ];
-
-    const adviceMap = {
-      '今日综合运势': ['优先处理确定性较高的事项，先形成正向反馈，再推进复杂事务。', '不宜同时展开过多任务，应保留注意力与决策余量。'],
-      '事业 / 项目': ['适合验收、收口、复盘与流程固化；不宜临时大幅调整方向。', '今日重点在交付闭环，而不是追求额外变化。'],
-      '财运 / 投资': ['保持现金流意识，避免因短期波动做出高杠杆决策。', '看不清逻辑时应暂缓，错过机会不等于形成损失。'],
-      '感情 / 人际': ['减少猜测，增加确认；清晰表达比情绪反应更有效。', '及时同步预期，可降低误解与重复沟通成本。'],
-      '健康 / 状态': ['宜降低无效消耗，保持睡眠、饮水与节律稳定。', '高强度任务建议拆分处理，中间安排恢复窗口。'],
-      '灵感 / 创作': ['先完成可验证的初版，再根据反馈修正。', '旧资料与过往记录中可能出现可复用素材。']
-    };
-
-    const luckyThings = ['米金色', '银灰色', '墨蓝色', '青绿色', '热茶', '清水', '木质物件', '靠窗座位', '整洁桌面', '纸质笔记'];
-    const warnings = ['疲惫时不做长期承诺', '重要信息至少复核一次', '避免被催促感牵引', '以数据判断，不以情绪解释', '少用模糊表达，多给明确选项'];
-    const almanacGood = ['订计划', '复盘', '沟通', '整理文档', '签小单', '学习', '清洁', '早睡', '会友', '修补漏洞', '备份资料', '轻运动'];
-    const almanacBad = ['冲动消费', '熬夜硬扛', '临时改大方向', '情绪化回复', '借钱担保', '拖延交付', '争辩输赢', '盲目加仓', '口头承诺', '忽略细节'];
-    const almanacGods = ['天德', '月恩', '时阳', '生气', '玉宇', '金匮', '民日', '司命'];
-    const almanacBadGods = ['月破', '大耗', '五虚', '劫煞', '灾煞', '血忌', '天火', '孤辰'];
-    const directions = ['正东', '东南', '正南', '西南', '正西', '西北', '正北', '东北'];
-
     const heavenlyStems = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
     const earthlyBranches = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
     const stemElement = { 甲:'木', 乙:'木', 丙:'火', 丁:'火', 戊:'土', 己:'土', 庚:'金', 辛:'金', 壬:'水', 癸:'水' };
     const branchElement = { 子:'水', 丑:'土', 寅:'木', 卯:'木', 辰:'土', 巳:'火', 午:'火', 未:'土', 申:'金', 酉:'金', 戌:'土', 亥:'水' };
-    const elementTone = {
-      木: '生发、规划、学习力', 火: '表达、热情、曝光度', 土: '稳定、承载、执行力', 金: '规则、效率、判断力', 水: '流动、灵感、适应力'
+    const elementNotes = {
+      木: '条理、计划、学习与生发', 火: '表达、曝光、热度与反应', 土: '承载、执行、稳定与收束', 金: '规则、效率、判断与边界', 水: '流动、信息、适应与复盘'
     };
-    const trigrams = [
-      { name: '乾', symbol: '☰', element: '金', text: '宜定规则、抓主线，少被细节拖走。' },
-      { name: '兑', symbol: '☱', element: '金', text: '宜沟通成交，用轻松方式推进关系。' },
-      { name: '离', symbol: '☲', element: '火', text: '宜展示成果，但要避免情绪上头。' },
-      { name: '震', symbol: '☳', element: '木', text: '宜启动新动作，先动起来再优化。' },
-      { name: '巽', symbol: '☴', element: '木', text: '宜借势而行，柔性推进比硬顶更顺。' },
-      { name: '坎', symbol: '☵', element: '水', text: '宜留后手，遇阻先查风险和路径。' },
-      { name: '艮', symbol: '☶', element: '土', text: '宜止损、收口、复盘，别继续消耗。' },
-      { name: '坤', symbol: '☷', element: '土', text: '宜稳扎稳打，把资源和人心先托住。' }
-    ];
+    const adviceMap = {
+      '今日综合': ['先处理可闭环事项，再进入复杂议题。', '把重要事项写成清单，减少临场判断。'],
+      '事业 / 项目': ['适合验收、复盘、补文档、定边界。', '若要推进新动作，先明确负责人和验收口径。'],
+      '财务 / 投资': ['重在风控和现金流，避免因短线波动加大杠杆。', '不清楚成本、期限和退出条件时，不宜仓促决定。'],
+      '感情 / 人际': ['先确认事实，再表达感受；少用暗示，多说具体需求。', '适合修复误会、同步预期，不宜争一时输赢。'],
+      '健康 / 状态': ['保持作息、饮水和轻运动；高强度任务拆段处理。', '疲劳时减少长期承诺，先恢复判断力。'],
+      '学习 / 创作': ['先做可验证初稿，再根据反馈修正。', '适合整理旧材料、建立模板和复用结构。']
+    };
 
     function hash(str) {
       let h = 2166136261;
-      for (let i = 0; i < str.length; i++) {
-        h ^= str.charCodeAt(i);
-        h = Math.imul(h, 16777619);
-      }
+      for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
       return Math.abs(h >>> 0);
     }
-
-    function pick(arr, seed, offset = 0) {
-      return arr[(seed + offset) % arr.length];
+    function escapeHtml(str) { return String(str).replace(/[&<>'"]/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[ch])); }
+    function pad2(num) { return String(num).padStart(2, '0'); }
+    function formatDateTime(date) { return `${date.getFullYear()}-${pad2(date.getMonth()+1)}-${pad2(date.getDate())} ${pad2(date.getHours())}:${pad2(date.getMinutes())}`; }
+    function getSolarClass() { return window.Solar || (window.Lunar && window.Lunar.Solar); }
+    function buildSolar(date) {
+      const SolarClass = getSolarClass();
+      if (!SolarClass || !SolarClass.fromYmdHms) throw new Error('历法库未加载完成，请刷新后重试。');
+      return SolarClass.fromYmdHms(date.getFullYear(), date.getMonth()+1, date.getDate(), date.getHours(), date.getMinutes(), 0);
     }
-
-    function autoZodiac(dateStr) {
-      const d = new Date(dateStr + 'T00:00:00');
-      const m = d.getMonth() + 1;
-      const day = d.getDate();
-      const signs = [
-        ['摩羯座', 1, 20], ['水瓶座', 2, 19], ['双鱼座', 3, 21], ['白羊座', 4, 20],
-        ['金牛座', 5, 21], ['双子座', 6, 22], ['巨蟹座', 7, 23], ['狮子座', 8, 23],
-        ['处女座', 9, 23], ['天秤座', 10, 24], ['天蝎座', 11, 23], ['射手座', 12, 22], ['摩羯座', 13, 1]
-      ];
-      for (const [sign, month, start] of signs) {
-        if ((m === month - 1 && day >= start) || (m === month && day < start)) return sign;
-      }
-      return '摩羯座';
+    function dayOfYear(date) { return Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000); }
+    function equationOfTimeMinutes(day) {
+      const b = 2 * Math.PI * (day - 81) / 364;
+      return 9.87 * Math.sin(2*b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b);
     }
-
-    function score(seed, salt) {
-      return 58 + ((seed >>> salt) % 39);
-    }
-
-    function escapeHtml(str) {
-      return String(str).replace(/[&<>'"]/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[ch]));
-    }
-
-    function ganzhi(index) {
-      return heavenlyStems[((index % 10) + 10) % 10] + earthlyBranches[((index % 12) + 12) % 12];
-    }
-
-    function getSolarClass() {
-      return window.Solar || (window.Lunar && window.Lunar.Solar);
-    }
-
-    function pad2(num) {
-      return String(num).padStart(2, '0');
-    }
-
-    function formatDateTime(date) {
-      return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())} ${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
-    }
-
-    function getTimeBranchLabel(date) {
-      const h = date.getHours();
-      if (h === 23 || h === 0) return '子时';
-      return earthlyBranches[Math.ceil(h / 2) % 12] + '时';
-    }
-
-    function equationOfTimeMinutes(dayOfYear) {
-      // NOAA 近似公式，单位：分钟。用于从平太阳时校正到真太阳时。
-      const b = 2 * Math.PI * (dayOfYear - 81) / 364;
-      return 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b);
-    }
-
-    function dayOfYear(date) {
-      const start = new Date(date.getFullYear(), 0, 0);
-      return Math.floor((date - start) / 86400000);
-    }
-
     function trueSolarDate(localDate, longitude, timezone) {
       const standardLongitude = Number(timezone) * 15;
       const longitudeCorrection = 4 * (Number(longitude) - standardLongitude);
@@ -501,97 +298,20 @@
       const offsetMinutes = longitudeCorrection + eot;
       return { date: new Date(localDate.getTime() + offsetMinutes * 60000), offsetMinutes, eot, longitudeCorrection };
     }
-
-    function buildSolar(date) {
-      const SolarClass = getSolarClass();
-      if (!SolarClass || !SolarClass.fromYmdHms) throw new Error('历法库未加载完成，请刷新后重试。');
-      return SolarClass.fromYmdHms(date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), 0);
+    function getTimeBranchLabel(date) {
+      const h = date.getHours();
+      if (h === 23 || h === 0) return '子时';
+      return earthlyBranches[Math.ceil(h / 2) % 12] + '时';
     }
-
     function countElementsFromPillars(pillars) {
       const counts = { 木:0, 火:0, 土:0, 金:0, 水:0 };
-      pillars.forEach(p => {
-        counts[stemElement[p[0]]] += 1;
-        counts[branchElement[p[1]]] += 1;
-      });
+      pillars.forEach(p => { counts[stemElement[p[0]]] += 1; counts[branchElement[p[1]]] += 1; });
       return counts;
     }
-
     function summarizeCounts(counts) {
-      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
       return { strongest: sorted[0][0], weakest: sorted[sorted.length - 1][0], balance: Object.values(counts).filter(v => v > 0).length };
     }
-
-    function analyzeBazi(birthday, birthMinute, birthHour, longitude, timezone, seed) {
-      const [year, month, day] = birthday.split('-').map(Number);
-      const [hour = 12, minute = 0] = String(birthMinute || '12:00').split(':').map(Number);
-      const localDate = new Date(year, month - 1, day, hour, minute, 0);
-      const trueSolar = trueSolarDate(localDate, longitude, timezone);
-      let baziDate = trueSolar.date;
-      let source = '真太阳时';
-
-      if (birthHour === 'unknown') {
-        baziDate = new Date(year, month - 1, day, (seed % 12) * 2, 0, 0);
-        source = '未知时辰：以随机时辰兜底';
-      } else if (birthHour !== 'auto') {
-        baziDate = new Date(year, month - 1, day, Number(birthHour), 0, 0);
-        source = '手动指定时辰';
-      }
-
-      const solar = buildSolar(baziDate);
-      const lunar = solar.getLunar();
-      const pillars = lunar.getBaZi();
-      const counts = countElementsFromPillars(pillars);
-      const summary = summarizeCounts(counts);
-      return {
-        pillars,
-        counts,
-        ...summary,
-        source,
-        localDate,
-        trueSolarDate: trueSolar.date,
-        trueSolarOffset: trueSolar.offsetMinutes,
-        eot: trueSolar.eot,
-        longitudeCorrection: trueSolar.longitudeCorrection,
-        timeBranch: getTimeBranchLabel(baziDate),
-        lunarText: lunar.toString(),
-        zodiacAnimal: lunar.getYearShengXiaoExact ? lunar.getYearShengXiaoExact() : lunar.getYearShengXiao(),
-        baZiWuXing: lunar.getBaZiWuXing ? lunar.getBaZiWuXing() : [],
-        baZiNaYin: lunar.getBaZiNaYin ? lunar.getBaZiNaYin() : [],
-        prevJieQi: lunar.getPrevJieQi && lunar.getPrevJieQi(),
-        nextJieQi: lunar.getNextJieQi && lunar.getNextJieQi()
-      };
-    }
-
-    function dayPillar(date) {
-      return buildSolar(date).getLunar().getDayInGanZhiExact2();
-    }
-
-    function baziReading(bazi) {
-      if (bazi.balance >= 5) return `五行分布相对完整，今日适合多事项协调，但每条线都应设定边界。旺在${bazi.strongest}，可借${elementTone[bazi.strongest]}；弱在${bazi.weakest}，宜主动补足${elementTone[bazi.weakest]}。`;
-      return `五行偏向${bazi.strongest}，今日可顺势推进与其相关的事务；${bazi.weakest}气较弱，容易在${elementTone[bazi.weakest]}方面出现疏漏，建议以清单、复核和时间缓冲补足。`;
-    }
-
-    function hexagram(seed, question) {
-      const upper = trigrams[seed % 8];
-      const lower = trigrams[(seed >>> 3) % 8];
-      const changing = 1 + ((seed >>> 6) % 6);
-      const theme = question.includes('财') ? '守正见财' : question.includes('事业') ? '先定后动' : question.includes('感情') ? '以诚通关' : '稳中开运';
-      return { upper, lower, changing, theme };
-    }
-
-    function uniquePick(arr, seed, count, offset = 0) {
-      const picked = [];
-      let cursor = (seed + offset) % arr.length;
-      const step = 7; // 与当前候选数组长度互质，避免重复循环。
-      for (let i = 0; picked.length < count && i < arr.length; i++) {
-        const item = arr[cursor % arr.length];
-        if (!picked.includes(item)) picked.push(item);
-        cursor += step;
-      }
-      return picked;
-    }
-
     function solarOfJieQi(jieQi) {
       if (!jieQi) return '无';
       const solar = jieQi.getSolar ? jieQi.getSolar() : jieQi._p?.solar;
@@ -604,165 +324,135 @@
       const mi = solar.getMinute ? solar.getMinute() : solar._p.minute;
       return `${name} ${y}-${pad2(m)}-${pad2(d)} ${pad2(h)}:${pad2(mi)}`;
     }
-
-    function dailyAlmanac(date, seed, question) {
-      const lunar = buildSolar(date).getLunar();
-      const dayStemBranch = lunar.getDayInGanZhiExact2();
-      const good = lunar.getDayYi ? lunar.getDayYi() : uniquePick(almanacGood, seed, 4, 19);
-      const bad = lunar.getDayJi ? lunar.getDayJi() : uniquePick(almanacBad, seed, 4, 29);
+    function analyzeBazi(birthday, birthMinute, birthHour, longitude, timezone, seed) {
+      const [year, month, day] = birthday.split('-').map(Number);
+      const [hour = 12, minute = 0] = String(birthMinute || '12:00').split(':').map(Number);
+      const localDate = new Date(year, month - 1, day, hour, minute, 0);
+      const trueSolar = trueSolarDate(localDate, longitude, timezone);
+      let baziDate = trueSolar.date;
+      let source = '真太阳时自动校正';
+      if (birthHour === 'unknown') { baziDate = new Date(year, month - 1, day, (seed % 12) * 2, 0, 0); source = '时辰未知：仅作近似参考'; }
+      else if (birthHour !== 'auto') { baziDate = new Date(year, month - 1, day, Number(birthHour), 0, 0); source = '手动指定时辰'; }
+      const solar = buildSolar(baziDate);
+      const lunar = solar.getLunar();
+      const pillars = lunar.getBaZi();
+      const counts = countElementsFromPillars(pillars);
       return {
-        dateText: date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }),
+        pillars, counts, ...summarizeCounts(counts), source, localDate,
+        trueSolarDate: trueSolar.date, trueSolarOffset: trueSolar.offsetMinutes,
+        eot: trueSolar.eot, longitudeCorrection: trueSolar.longitudeCorrection,
+        timeBranch: getTimeBranchLabel(baziDate), lunarText: lunar.toString(),
+        zodiacAnimal: lunar.getYearShengXiaoExact ? lunar.getYearShengXiaoExact() : lunar.getYearShengXiao(),
+        baZiWuXing: lunar.getBaZiWuXing ? lunar.getBaZiWuXing() : [],
+        baZiNaYin: lunar.getBaZiNaYin ? lunar.getBaZiNaYin() : [],
+        prevJieQi: lunar.getPrevJieQi && lunar.getPrevJieQi(),
+        nextJieQi: lunar.getNextJieQi && lunar.getNextJieQi()
+      };
+    }
+    function dailyAlmanac(date) {
+      const lunar = buildSolar(date).getLunar();
+      const good = lunar.getDayYi ? lunar.getDayYi() : [];
+      const bad = lunar.getDayJi ? lunar.getDayJi() : [];
+      return {
+        dateText: date.toLocaleDateString('zh-CN', { year:'numeric', month:'long', day:'numeric', weekday:'long' }),
         lunarText: lunar.toString(),
-        dayStemBranch,
+        dayStemBranch: lunar.getDayInGanZhiExact2(),
         dayOfficer: `${lunar.getZhiXing ? lunar.getZhiXing() : ''}日｜${lunar.getDayTianShen ? lunar.getDayTianShen() : ''}${lunar.getDayTianShenType ? '·' + lunar.getDayTianShenType() : ''}${lunar.getDayTianShenLuck ? '·' + lunar.getDayTianShenLuck() : ''}`,
-        good,
-        bad,
+        good, bad,
         clash: `冲${lunar.getDayChongDesc ? lunar.getDayChongDesc() : lunar.getChongDesc()}｜煞${lunar.getDaySha ? lunar.getDaySha() : lunar.getSha()}`,
         directions: `喜神${lunar.getDayPositionXiDesc()}｜财神${lunar.getDayPositionCaiDesc()}｜福神${lunar.getDayPositionFuDesc()}`,
         gods: `吉神：${(lunar.getDayJiShen ? lunar.getDayJiShen() : []).join('、') || '无'}｜凶煞：${(lunar.getDayXiongSha ? lunar.getDayXiongSha() : []).join('、') || '无'}`,
         pengzu: `${lunar.getPengZuGan()}，${lunar.getPengZuZhi()}`,
+        xiu: `${lunar.getXiu ? lunar.getXiu() : ''}${lunar.getXiuLuck ? '（' + lunar.getXiuLuck() + '）' : ''}`,
         prevJieQi: solarOfJieQi(lunar.getPrevJieQi && lunar.getPrevJieQi()),
-        nextJieQi: solarOfJieQi(lunar.getNextJieQi && lunar.getNextJieQi()),
-        xiu: `${lunar.getXiu ? lunar.getXiu() : ''}${lunar.getXiuLuck ? '（' + lunar.getXiuLuck() + '）' : ''}`
+        nextJieQi: solarOfJieQi(lunar.getNextJieQi && lunar.getNextJieQi())
       };
     }
-
-    function mysticGrid(labels, values) {
-      return labels.map((label, index) => `
-        <div class="mystic-cell">
-          <div class="label">${label}</div>
-          <div class="pillar">${values[index]}</div>
-        </div>
-      `).join('');
+    function baziReading(bazi) {
+      if (bazi.balance >= 5) return `五行覆盖完整，日常事务可多线协调；较旺为${bazi.strongest}，对应${elementNotes[bazi.strongest]}，较弱为${bazi.weakest}，宜用清单、复核或节奏管理补足。`;
+      return `五行偏向${bazi.strongest}，处理相关事务较顺；${bazi.weakest}不足处容易形成疏漏，今日不宜凭感觉快速拍板。`;
+    }
+    function elementGrid(counts) {
+      return Object.entries(counts).map(([el, count]) => `<div class="element"><span>${el}</span><b>${count}</b><small>${elementNotes[el].split('、')[0]}</small></div>`).join('');
+    }
+    function pillarTable(bazi) {
+      const labels = ['年柱','月柱','日柱','时柱'];
+      return `<table class="pillar-table"><thead><tr>${labels.map(l => `<th>${l}</th>`).join('')}</tr></thead><tbody><tr>${bazi.pillars.map((p, i) => `<td><div class="pillar">${p}</div><div class="sub">${bazi.baZiWuXing[i] || ''}<br>${bazi.baZiNaYin[i] || ''}</div></td>`).join('')}</tr></tbody></table>`;
+    }
+    function almanacTable(a) {
+      return `<table class="almanac-table"><tbody>
+        <tr><th>日期</th><td>${a.dateText}｜${a.dayStemBranch}日｜${a.dayOfficer}</td></tr>
+        <tr><th>农历</th><td>${a.lunarText}</td></tr>
+        <tr><th class="good">宜</th><td>${a.good.join('、') || '无'}</td></tr>
+        <tr><th class="bad">忌</th><td>${a.bad.join('、') || '无'}</td></tr>
+        <tr><th>冲煞</th><td>${a.clash}</td></tr>
+        <tr><th>方位</th><td>${a.directions}</td></tr>
+        <tr><th>神煞</th><td>${a.gods}</td></tr>
+        <tr><th>星宿</th><td>${a.xiu || '无'}</td></tr>
+        <tr><th>节气</th><td>上一：${a.prevJieQi}<br>下一：${a.nextJieQi}</td></tr>
+        <tr><th>彭祖</th><td>${a.pengzu}</td></tr>
+      </tbody></table>`;
     }
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const data = new FormData(form);
-      const name = String(data.get('name')).trim();
-      const birthday = String(data.get('birthday'));
-      const question = String(data.get('question'));
-      const birthHour = String(data.get('birthHour'));
-      const birthMinute = String(data.get('birthMinute') || '12:00');
-      const longitude = Number(data.get('longitude') || 116.4074);
-      const timezone = Number(data.get('timezone') || 8);
-      const today = new Date().toLocaleDateString('zh-CN');
-      const zodiac = data.get('zodiac') === '自动感应' ? autoZodiac(birthday) : data.get('zodiac');
-      const seed = hash(`${name}-${birthday}-${question}-${today}`);
-      const safeName = escapeHtml(name);
+      try {
+        const data = new FormData(form);
+        const name = String(data.get('name')).trim();
+        const birthday = String(data.get('birthday'));
+        const question = String(data.get('question'));
+        const birthHour = String(data.get('birthHour'));
+        const birthMinute = String(data.get('birthMinute') || '12:00');
+        const longitude = Number(data.get('longitude') || 116.4074);
+        const timezone = Number(data.get('timezone') || 8);
+        const seed = hash(`${name}-${birthday}-${question}`);
+        const bazi = analyzeBazi(birthday, birthMinute, birthHour, longitude, timezone, seed);
+        const almanac = dailyAlmanac(new Date());
+        const advice = adviceMap[question] || adviceMap['今日综合'];
+        const safeName = escapeHtml(name);
 
-      const overall = score(seed, 1);
-      const love = score(seed, 5);
-      const money = score(seed, 9);
-      const work = score(seed, 13);
-      const energy = score(seed, 17);
-      const poem = pick(poems, seed);
-      const advice = pick(adviceMap[question], seed, 3);
-      const lucky = pick(luckyThings, seed, 7);
-      const warning = pick(warnings, seed, 11);
-      const luckyNumber = 1 + (seed % 9);
-      const bazi = analyzeBazi(birthday, birthMinute, birthHour, longitude, timezone, seed);
-      const gua = hexagram(seed, question);
-      const almanac = dailyAlmanac(new Date(), seed, question);
-
-      output.innerHTML = `
-        <div class="result">
-          <h2>${safeName} 的今日分析</h2>
-          <div class="pillbox">
-            <span class="pill">${zodiac}</span>
-            <span class="pill">幸运数 ${luckyNumber}</span>
-            <span class="pill">助运参考：${lucky}</span>
-            <span class="pill">问题：${question}</span>
-          </div>
-
-          <div class="fortune-card">
-            <div class="small-title">今日总论</div>
-            <strong>「${poem}」</strong><br />
-            今日综合指数为 <strong>${overall}</strong> 分。重点不是等待外部变化，而是选择一个确定动作，形成连续推进。
-          </div>
-
-          <div class="score-list">
-            ${scoreRow('综合', overall)}
-            ${scoreRow('事业', work)}
-            ${scoreRow('财运', money)}
-            ${scoreRow('人际', love)}
-            ${scoreRow('能量', energy)}
-          </div>
-
-          <div class="fortune-card">
-            <div class="small-title">真太阳时 · 精确排盘</div>
-            <strong>${bazi.source}｜${bazi.timeBranch}</strong><br />
-            出生地经度 ${longitude.toFixed(4)}°｜标准时区 UTC+${timezone}<br />
-            标准时间：${formatDateTime(bazi.localDate)}｜真太阳时：${formatDateTime(bazi.trueSolarDate)}<br />
-            经度修正 ${bazi.longitudeCorrection.toFixed(1)} 分钟｜均时差 ${bazi.eot.toFixed(1)} 分钟｜总修正 ${bazi.trueSolarOffset.toFixed(1)} 分钟
-          </div>
-
-          <div class="fortune-card">
-            <div class="small-title">生辰八字 · 四柱</div>
-            <div class="mystic-grid">
-              ${mysticGrid(['年柱','月柱','日柱','时柱'], bazi.pillars)}
+        output.innerHTML = `
+          <article>
+            <div class="report-head">
+              <h2>${safeName}｜四柱排盘</h2>
+              <div class="meta">
+                <span class="tag">${bazi.source}</span>
+                <span class="tag">${bazi.timeBranch}</span>
+                <span class="tag">生肖：${bazi.zodiacAnimal}</span>
+                <span class="tag">关注：${question}</span>
+              </div>
             </div>
-            <div class="element-list">
-              ${Object.entries(bazi.counts).map(([el, count]) => `<span class="element-tag">${el} × ${count}</span>`).join('')}
+            <div class="report-body">
+              <section class="block"><h3>一、真太阳时校正</h3><div class="block-content">
+                标准时间：${formatDateTime(bazi.localDate)}<br>
+                真太阳时：${formatDateTime(bazi.trueSolarDate)}<br>
+                出生地经度 ${longitude.toFixed(4)}°｜标准时区 UTC+${timezone}<br>
+                经度修正 ${bazi.longitudeCorrection.toFixed(1)} 分钟｜均时差 ${bazi.eot.toFixed(1)} 分钟｜合计 ${bazi.trueSolarOffset.toFixed(1)} 分钟
+              </div></section>
+
+              <section class="block"><h3>二、生辰八字</h3><div class="block-content">
+                ${pillarTable(bazi)}
+                <p>农历：${bazi.lunarText}</p>
+                <p>节气：上一节气 ${solarOfJieQi(bazi.prevJieQi)}｜下一节气 ${solarOfJieQi(bazi.nextJieQi)}</p>
+              </div></section>
+
+              <section class="block"><h3>三、五行分布</h3><div class="block-content">
+                <div class="element-grid">${elementGrid(bazi.counts)}</div>
+                <p>${baziReading(bazi)}</p>
+              </div></section>
+
+              <section class="block"><h3>四、今日黄历</h3><div class="block-content">${almanacTable(almanac)}</div></section>
+
+              <section class="block"><h3>五、事项建议</h3><div class="block-content two-col">
+                <div><b>宜采用</b><ul class="list"><li>${advice[0]}</li><li>优先选择黄历“宜”中与当前事项接近的动作。</li></ul></div>
+                <div><b>宜规避</b><ul class="list"><li>${advice[1]}</li><li>若事项落在黄历“忌”类，建议降低风险敞口或延后关键动作。</li></ul></div>
+              </div></section>
             </div>
-            <strong>农历：${bazi.lunarText}｜生肖：${bazi.zodiacAnimal}</strong><br />
-            纳音：${bazi.baZiNaYin.join(' / ')}<br />
-            四柱五行：${bazi.baZiWuXing.join(' / ')}<br />
-            节气：上一节气 ${solarOfJieQi(bazi.prevJieQi)}｜下一节气 ${solarOfJieQi(bazi.nextJieQi)}<br />
-            ${baziReading(bazi)}
-          </div>
-
-          <div class="fortune-card">
-            <div class="small-title">五行八卦 · 今日卦象</div>
-            <strong>${gua.upper.symbol}${gua.lower.symbol} ${gua.upper.name}上${gua.lower.name}下｜${gua.theme}｜动爻 ${gua.changing}</strong><br />
-            上卦属${gua.upper.element}：${gua.upper.text}<br />
-            下卦属${gua.lower.element}：${gua.lower.text}
-          </div>
-
-          <div class="fortune-card">
-            <div class="small-title">今日黄历 · 宜忌</div>
-            <strong>${almanac.dateText}｜${almanac.dayStemBranch}日｜${almanac.dayOfficer}</strong>
-            <div class="almanac-list">
-              <div class="almanac-row"><b>农历</b><span>${almanac.lunarText}</span></div>
-              <div class="almanac-row"><b>宜</b><span>${almanac.good.join('、')}</span></div>
-              <div class="almanac-row"><b>忌</b><span>${almanac.bad.join('、')}</span></div>
-              <div class="almanac-row"><b>冲煞</b><span>${almanac.clash}</span></div>
-              <div class="almanac-row"><b>方位</b><span>${almanac.directions}</span></div>
-              <div class="almanac-row"><b>神煞</b><span>${almanac.gods}</span></div>
-              <div class="almanac-row"><b>星宿</b><span>${almanac.xiu}</span></div>
-              <div class="almanac-row"><b>节气</b><span>上一：${almanac.prevJieQi}<br />下一：${almanac.nextJieQi}</span></div>
-              <div class="almanac-row"><b>彭祖</b><span>${almanac.pengzu}</span></div>
-            </div>
-          </div>
-
-          <div class="fortune-card">
-            <div class="small-title">今日建议</div>
-            ${advice}
-          </div>
-
-          <div class="fortune-card">
-            <div class="small-title">避坑提醒</div>
-            ${warning}。
-          </div>
-        </div>
-      `;
-
-      requestAnimationFrame(() => {
-        document.querySelectorAll('.bar span').forEach(el => {
-          el.style.width = el.dataset.value + '%';
-        });
-      });
+          </article>`;
+      } catch (err) {
+        output.innerHTML = `<div class="empty"><div><b>排盘失败</b>${escapeHtml(err.message || err)}</div></div>`;
+      }
     });
-
-    function scoreRow(label, value) {
-      return `
-        <div class="score">
-          <span>${label}</span>
-          <div class="bar"><span data-value="${value}"></span></div>
-          <b>${value}</b>
-        </div>
-      `;
-    }
   </script>
 </body>
 </html>
