@@ -107,6 +107,9 @@
       box-shadow: 0 12px 26px rgba(118,36,36,.18);
     }
     button:active { transform: translateY(1px); }
+    .geo-status { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .geo-status.ok { color: var(--green); }
+    .geo-status.warn { color: var(--red-dark); }
     .note { margin: 12px 0 0; color: var(--muted); line-height: 1.7; font-size: 12px; }
 
     .output { min-height: 560px; overflow: hidden; }
@@ -206,8 +209,16 @@
 
         <div class="row">
           <div>
-            <label for="longitude">出生地经度</label>
-            <input id="longitude" name="longitude" type="number" min="73" max="135" step="0.0001" value="116.4074" placeholder="北京 116.4074" />
+            <label for="birthPlace">出生地县 / 区</label>
+            <input id="birthPlace" name="birthPlace" list="placeHints" value="北京市东城区" placeholder="例如：深圳南山区 / 杭州西湖区 / 成都武侯区" required />
+            <datalist id="placeHints">
+              <option value="北京市东城区"></option><option value="上海市黄浦区"></option><option value="广州市天河区"></option><option value="深圳市南山区"></option>
+              <option value="杭州市西湖区"></option><option value="成都市武侯区"></option><option value="南京市玄武区"></option><option value="武汉市武昌区"></option>
+            </datalist>
+            <input id="longitude" name="longitude" type="hidden" value="116.4074" />
+            <input id="latitude" name="latitude" type="hidden" value="39.9042" />
+            <input id="matchedPlace" name="matchedPlace" type="hidden" value="北京市东城区" />
+            <p class="geo-status ok" id="geoStatus">已匹配：北京市东城区｜经度 116.4074°</p>
           </div>
           <div>
             <label for="timezone">时区</label>
@@ -248,14 +259,14 @@
         </select>
 
         <button type="submit">生成排盘</button>
-        <p class="note">算法说明：农历、节气、四柱、宜忌、冲煞与方位由 lunar-javascript 计算；真太阳时采用经度修正 + NOAA 均时差近似。结果仅作传统文化与日程规划参考。</p>
+        <p class="note">算法说明：农历、节气、四柱、宜忌、冲煞与方位由 lunar-javascript 计算；出生地支持县/区名称自动匹配经度，真太阳时采用经度修正 + NOAA 均时差近似。结果仅作传统文化与日程规划参考。</p>
       </form>
 
       <section class="card output" id="output">
         <div class="empty">
           <div>
             <b>等待排盘</b>
-            填写出生日期、时间与经度后，生成四柱、五行、节气和今日黄历。
+            填写出生日期、时间与出生地县/区后，生成四柱、五行、节气和今日黄历。
           </div>
         </div>
       </section>
@@ -283,6 +294,18 @@
       子丑:'六合土', 丑子:'六合土', 寅亥:'六合木', 亥寅:'六合木', 卯戌:'六合火', 戌卯:'六合火', 辰酉:'六合金', 酉辰:'六合金', 巳申:'六合水', 申巳:'六合水', 午未:'六合', 未午:'六合',
       子未:'相害', 未子:'相害', 丑午:'相害', 午丑:'相害', 寅巳:'相害', 巳寅:'相害', 卯辰:'相害', 辰卯:'相害', 申亥:'相害', 亥申:'相害', 酉戌:'相害', 戌酉:'相害',
       子卯:'相刑', 卯子:'相刑', 辰辰:'自刑', 午午:'自刑', 酉酉:'自刑', 亥亥:'自刑'
+    };
+    const placeIndex = {
+      '北京': { name:'北京市东城区', lng:116.4074, lat:39.9042 }, '北京市': { name:'北京市东城区', lng:116.4074, lat:39.9042 }, '东城区': { name:'北京市东城区', lng:116.4164, lat:39.9289 }, '朝阳区': { name:'北京市朝阳区', lng:116.4431, lat:39.9215 }, '海淀区': { name:'北京市海淀区', lng:116.2981, lat:39.9593 },
+      '上海': { name:'上海市黄浦区', lng:121.4737, lat:31.2304 }, '上海市': { name:'上海市黄浦区', lng:121.4737, lat:31.2304 }, '黄浦区': { name:'上海市黄浦区', lng:121.4844, lat:31.2317 }, '浦东新区': { name:'上海市浦东新区', lng:121.5447, lat:31.2222 },
+      '广州': { name:'广州市天河区', lng:113.2644, lat:23.1291 }, '广州市': { name:'广州市天河区', lng:113.2644, lat:23.1291 }, '天河区': { name:'广州市天河区', lng:113.3612, lat:23.1247 }, '越秀区': { name:'广州市越秀区', lng:113.2668, lat:23.1285 },
+      '深圳': { name:'深圳市福田区', lng:114.0579, lat:22.5431 }, '深圳市': { name:'深圳市福田区', lng:114.0579, lat:22.5431 }, '南山区': { name:'深圳市南山区', lng:113.9304, lat:22.5333 }, '福田区': { name:'深圳市福田区', lng:114.0557, lat:22.5229 }, '宝安区': { name:'深圳市宝安区', lng:113.8831, lat:22.5537 },
+      '杭州': { name:'杭州市西湖区', lng:120.1551, lat:30.2741 }, '杭州市': { name:'杭州市西湖区', lng:120.1551, lat:30.2741 }, '西湖区': { name:'杭州市西湖区', lng:120.1302, lat:30.2595 }, '余杭区': { name:'杭州市余杭区', lng:120.2994, lat:30.4183 },
+      '成都': { name:'成都市武侯区', lng:104.0665, lat:30.5723 }, '成都市': { name:'成都市武侯区', lng:104.0665, lat:30.5723 }, '武侯区': { name:'成都市武侯区', lng:104.0434, lat:30.6424 }, '锦江区': { name:'成都市锦江区', lng:104.0835, lat:30.6561 },
+      '南京': { name:'南京市玄武区', lng:118.7969, lat:32.0603 }, '南京市': { name:'南京市玄武区', lng:118.7969, lat:32.0603 }, '玄武区': { name:'南京市玄武区', lng:118.7978, lat:32.0486 },
+      '武汉': { name:'武汉市武昌区', lng:114.3054, lat:30.5931 }, '武汉市': { name:'武汉市武昌区', lng:114.3054, lat:30.5931 }, '武昌区': { name:'武汉市武昌区', lng:114.3162, lat:30.5542 },
+      '西安': { name:'西安市碑林区', lng:108.9398, lat:34.3416 }, '西安市': { name:'西安市碑林区', lng:108.9398, lat:34.3416 }, '碑林区': { name:'西安市碑林区', lng:108.9343, lat:34.2304 },
+      '重庆': { name:'重庆市渝中区', lng:106.5516, lat:29.5630 }, '重庆市': { name:'重庆市渝中区', lng:106.5516, lat:29.5630 }, '渝中区': { name:'重庆市渝中区', lng:106.5689, lat:29.5528 }
     };
     const questionProfiles = {
       '今日综合': {
@@ -323,6 +346,81 @@
       }
     };
 
+
+    const birthPlaceInput = document.querySelector('#birthPlace');
+    const longitudeInput = document.querySelector('#longitude');
+    const latitudeInput = document.querySelector('#latitude');
+    const matchedPlaceInput = document.querySelector('#matchedPlace');
+    const geoStatus = document.querySelector('#geoStatus');
+    let geocodeTimer = null;
+
+    function normalizePlaceName(value) {
+      return String(value || '').trim().replace(/中国|中华人民共和国/g, '').replace(/\s+/g, '');
+    }
+    function applyPlaceMatch(match, source = '本地') {
+      longitudeInput.value = Number(match.lng).toFixed(4);
+      latitudeInput.value = Number(match.lat || 0).toFixed(4);
+      matchedPlaceInput.value = match.name;
+      geoStatus.textContent = `已匹配：${match.name}｜经度 ${Number(match.lng).toFixed(4)}°｜${source}`;
+      geoStatus.className = 'geo-status ok';
+      return match;
+    }
+    function localPlaceMatch(value) {
+      const q = normalizePlaceName(value);
+      if (!q) return null;
+      if (placeIndex[q]) return placeIndex[q];
+      const keys = Object.keys(placeIndex).sort((a, b) => {
+        const aSuffix = q.endsWith(a) ? 1 : 0;
+        const bSuffix = q.endsWith(b) ? 1 : 0;
+        if (aSuffix !== bSuffix) return bSuffix - aSuffix;
+        return b.length - a.length;
+      });
+      const key = keys.find(k => q.includes(k) || k.includes(q));
+      return key ? placeIndex[key] : null;
+    }
+    async function remotePlaceMatch(value) {
+      const q = normalizePlaceName(value);
+      if (!q) return null;
+      const cacheKey = 'birthplace:' + q;
+      try {
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) return JSON.parse(cached);
+      } catch (_) {}
+      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=cn&accept-language=zh-CN&q=${encodeURIComponent(q)}`;
+      const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!resp.ok) throw new Error('地名服务暂不可用');
+      const rows = await resp.json();
+      if (!rows || !rows.length) return null;
+      const row = rows[0];
+      const match = { name: row.display_name.split(',').slice(0, 3).join('，'), lng: Number(row.lon), lat: Number(row.lat) };
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(match)); } catch (_) {}
+      return match;
+    }
+    async function resolveBirthPlace(value, required = false) {
+      const local = localPlaceMatch(value);
+      if (local) return applyPlaceMatch(local, '本地库');
+      if (!normalizePlaceName(value)) {
+        geoStatus.textContent = '请输入出生地县/区，例如：深圳南山区';
+        geoStatus.className = 'geo-status warn';
+        if (required) throw new Error('请填写出生地县/区。');
+        return null;
+      }
+      geoStatus.textContent = '正在匹配出生地经度…';
+      geoStatus.className = 'geo-status';
+      try {
+        const remote = await remotePlaceMatch(value);
+        if (remote) return applyPlaceMatch(remote, '在线匹配');
+      } catch (_) {}
+      geoStatus.textContent = '未能自动匹配，请补充城市 + 区县，例如：深圳市南山区。';
+      geoStatus.className = 'geo-status warn';
+      if (required) throw new Error('出生地未匹配到经度，请输入更完整的城市 + 区县。');
+      return null;
+    }
+    birthPlaceInput.addEventListener('input', () => {
+      clearTimeout(geocodeTimer);
+      geocodeTimer = setTimeout(() => resolveBirthPlace(birthPlaceInput.value), 500);
+    });
+    birthPlaceInput.addEventListener('blur', () => resolveBirthPlace(birthPlaceInput.value));
 
     function hash(str) {
       let h = 2166136261;
@@ -523,7 +621,7 @@
       </tbody></table>`;
     }
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       try {
         const data = new FormData(form);
@@ -532,7 +630,10 @@
         const question = String(data.get('question'));
         const birthHour = String(data.get('birthHour'));
         const birthMinute = String(data.get('birthMinute') || '12:00');
-        const longitude = Number(data.get('longitude') || 116.4074);
+        const placeMatch = await resolveBirthPlace(String(data.get('birthPlace') || ''), true);
+        const longitude = Number(placeMatch.lng);
+        const latitude = Number(placeMatch.lat || 0);
+        const placeName = placeMatch.name;
         const timezone = Number(data.get('timezone') || 8);
         const seed = hash(`${name}-${birthday}-${question}`);
         const bazi = analyzeBazi(birthday, birthMinute, birthHour, longitude, timezone, seed);
@@ -548,6 +649,7 @@
                 <span class="tag">${bazi.source}</span>
                 <span class="tag">${bazi.timeBranch}</span>
                 <span class="tag">生肖：${bazi.zodiacAnimal}</span>
+                <span class="tag">出生地：${escapeHtml(placeName)}</span>
                 <span class="tag">关注：${question}</span>
               </div>
             </div>
@@ -555,7 +657,7 @@
               <section class="block"><h3>一、真太阳时校正</h3><div class="block-content">
                 标准时间：${formatDateTime(bazi.localDate)}<br>
                 真太阳时：${formatDateTime(bazi.trueSolarDate)}<br>
-                出生地经度 ${longitude.toFixed(4)}°｜标准时区 UTC+${timezone}<br>
+                出生地：${escapeHtml(placeName)}｜经度 ${longitude.toFixed(4)}°${latitude ? `｜纬度 ${latitude.toFixed(4)}°` : ''}｜标准时区 UTC+${timezone}<br>
                 经度修正 ${bazi.longitudeCorrection.toFixed(1)} 分钟｜均时差 ${bazi.eot.toFixed(1)} 分钟｜合计 ${bazi.trueSolarOffset.toFixed(1)} 分钟
               </div></section>
 
